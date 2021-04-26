@@ -10,6 +10,11 @@ spec:
       activeDeadlineSeconds: 120
       template:
         spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10101
+            seccompProfile: # Requires K8s 1.19+, use annotation equivalent for older versions.
+              type: RuntimeDefault
           containers:
           - name: aksupport
             image: public.ecr.aws/stevenjdh/aksupport
@@ -22,7 +27,26 @@ spec:
                 name: aksupport-config
             - secretRef:
                 name: aksupport-secret
-          restartPolicy: Never
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "500m"
+              limits:
+                memory: "512Mi"
+                cpu: "1000m"
+            volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            securityContext:
+              readOnlyRootFilesystem: true # Causes 'Failed to create CoreCLR, HRESULT: 0x80004005', so fix using tmp volume mount.
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+          volumes:
+          - emptyDir: {}
+            name: tmp
+          restartPolicy: Never       
   schedule: '0 8 * * *'
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
