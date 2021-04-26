@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: aksupport-cronjob
+spec:
+  jobTemplate:
+    spec:
+      completions: 1
+      backoffLimit: 0
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          containers:
+          - name: aksupport
+            image: public.ecr.aws/stevenjdh/aksupport
+            # Uncomment below for testing a specific version.
+            #args:
+            #- "1.17.0"
+            imagePullPolicy: Always
+            envFrom:
+            - configMapRef:
+                name: aksupport-config
+            - secretRef:
+                name: aksupport-secret
+          restartPolicy: Never
+  schedule: '0 8 * * *'
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
