@@ -1,6 +1,7 @@
 # AKSupport
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/StevenJDH/AKSupport?include_prereleases)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/15ee917d85e94a3a95f213f923a0b7ba)](https://www.codacy.com/gh/StevenJDH/AKSupport/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=StevenJDH/AKSupport&amp;utm_campaign=Badge_Grade)
 ![Maintenance](https://img.shields.io/maintenance/yes/2021)
 ![GitHub](https://img.shields.io/github/license/StevenJDH/AKSupport)
 
@@ -18,7 +19,7 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 * **Coming Soon:** Support for sending alert mails directly via Microsoft Graph API.  
 
 ## Prerequisites
-* An Azure Kubernetes Service (AKS) cluster running Kubernetes 1.7+ (Use CronJob `apiVersion: batch/v1` for v1.21+)
+* An Azure Kubernetes Service (AKS) cluster (Use CronJob `apiVersion: batch/v1` for v1.21+)
 * Last version of [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 * An Azure [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) for API access.
 
@@ -76,7 +77,7 @@ Exit codes can be useful for Triggers configured in Azure or other monitoring to
 |Exit Code  |Meaning                                                                       
 |:---------:|:--------------
 |0          |The version of Kubernetes in AKS is still supported.
-|1          |The version of Kubernetes in AKS in not supported.
+|1          |The version of Kubernetes in AKS is not supported.
 |2          |The version of Kubernetes in AKS is about to lose support.
 
 ## Testing
@@ -96,7 +97,7 @@ containers:
 Also, change the `schedule` field to `* * * * *` to run AKSupport every minute while testing or to any other [cron expression](https://crontab.guru/) as needed. Use `az aks get-versions --location northeurope --output table` to see what versions are currently supported for a particular region and their upgrade paths as a reference.
 
 ## Additional information
-When AKSupport finishes checking the environment, the underlying pod will either have a `completed` status or an `error` status by design. Only the last state will be visible at any given time. To view the logs for the last run, type:
+When AKSupport finishes checking the environment, the underlying pod will either have a `Completed` status or an `Error` status by design. Only the last state will be visible at any given time. To view the logs for the last run, type:
 
 ```bash
 kubectl logs <aksupport-cronjob-00-00>

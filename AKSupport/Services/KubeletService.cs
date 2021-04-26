@@ -37,7 +37,7 @@ namespace AKSupport.Services
         private HttpClient _httpClient;
 
         /// <summary>
-        /// Constructs a new <see cref="KubeletService"/> instance to with the Kubelet API.
+        /// Constructs a new <see cref="KubeletService"/> instance to interact with the Kubelet API.
         /// </summary>
         /// <param name="timeoutSeconds">
         /// Number of seconds to wait before a request times out. Default is 90 seconds.
