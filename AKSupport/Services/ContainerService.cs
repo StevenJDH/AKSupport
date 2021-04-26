@@ -39,7 +39,7 @@ namespace AKSupport.Services
         private OAuth2Response _cachedAuthResponse;
 
         /// <summary>
-        /// Constructs a new <see cref="ContainerService"/> instance to with the AKS API.
+        /// Constructs a new <see cref="ContainerService"/> instance to interact with the AKS API.
         /// </summary>
         /// <param name="subscriptionId"></param>
         /// <param name="tenant"></param>
@@ -62,7 +62,8 @@ namespace AKSupport.Services
         public async Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location)
         {
             _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", await GetAuthorizeTokenAsync());
+                new AuthenticationHeaderValue("Bearer", await GetAuthorizeTokenAsync()
+                    .ConfigureAwait(false));
 
             using var response = await _httpClient
                 .GetAsync($"https://management.azure.com/subscriptions/{_subscriptionId}/providers/Microsoft.ContainerService/locations/{location}/orchestrators?api-version=2019-08-01&resource-type=managedClusters");
@@ -106,7 +107,6 @@ namespace AKSupport.Services
             using var response = await _httpClient.SendAsync(req);
 
             response.EnsureSuccessStatusCode();
-
             _cachedAuthResponse = JsonSerializer.Deserialize<OAuth2Response>(await response.Content.ReadAsStringAsync());
             
             return _cachedAuthResponse?.AccessToken ?? "";
@@ -123,7 +123,7 @@ namespace AKSupport.Services
         /// </summary>
         private void CreateHttpClient()
         {
-            _httpClient = new HttpClient()
+            _httpClient = new HttpClient
             {
                 Timeout = _timeoutSeconds
             };
