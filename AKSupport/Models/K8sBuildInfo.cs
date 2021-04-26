@@ -30,10 +30,10 @@ namespace AKSupport.Models
         private readonly string _gitVersion;
 
         [JsonPropertyName("major")]
-        public string Major { get; set; }
+        public string Major { get; init; }
         
         [JsonPropertyName("minor")]
-        public string Minor { get; set; }
+        public string Minor { get; init; }
         
         [JsonPropertyName("gitVersion")]
         public string GitVersion
@@ -43,21 +43,21 @@ namespace AKSupport.Models
         }
 
         [JsonPropertyName("gitCommit")]
-        public string GitCommit { get; set; }
+        public string GitCommit { get; init; }
         
         [JsonPropertyName("gitTreeState")]
-        public string GitTreeState { get; set; }
+        public string GitTreeState { get; init; }
         
         [JsonPropertyName("buildDate")]
-        public DateTime BuildDate { get; set; }
+        public DateTime BuildDate { get; init; }
         
         [JsonPropertyName("goVersion")]
-        public string GoVersion { get; set; }
+        public string GoVersion { get; init; }
         
         [JsonPropertyName("compiler")]
-        public string Compiler { get; set; }
+        public string Compiler { get; init; }
         
         [JsonPropertyName("platform")]
-        public string Platform { get; set; }
+        public string Platform { get; init; }
     }
 }

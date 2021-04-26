@@ -28,24 +28,24 @@ namespace AKSupport.Models
     public record OAuth2Response
     {
         [JsonPropertyName("token_type")]
-        public string TokenType { get; set; }
+        public string TokenType { get; init; }
         
         [JsonPropertyName("expires_in")]
-        public string ExpiresIn { get; set; }
+        public string ExpiresIn { get; init; }
         
         [JsonPropertyName("ext_expires_in")]
-        public string ExtendedExpiresIn { get; set; }
+        public string ExtendedExpiresIn { get; init; }
         
         [JsonPropertyName("expires_on")]
-        public string ExpiresOn { get; set; }
+        public string ExpiresOn { get; init; }
         
         [JsonPropertyName("not_before")]
-        public string NotBefore { get; set; }
+        public string NotBefore { get; init; }
         
         [JsonPropertyName("resource")]
-        public string Resource { get; set; }
+        public string Resource { get; init; }
         
         [JsonPropertyName("access_token")]
-        public string AccessToken { get; set; }
+        public string AccessToken { get; init; }
     }
 }

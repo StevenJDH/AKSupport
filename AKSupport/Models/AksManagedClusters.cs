@@ -28,54 +28,54 @@ namespace AKSupport.Models
     public record AksManagedClusters
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string Id { get; init; }
         
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; init; }
         
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string Type { get; init; }
         
         [JsonPropertyName("properties")]
-        public OrchestratorVersionProfile VersionProfile { get; set; }
+        public OrchestratorVersionProfile VersionProfile { get; init; }
 
         [JsonPropertyName("orchestrators")]
-        public IEnumerable<Orchestrator> Orchestrators { get; set; }
+        public IEnumerable<Orchestrator> Orchestrators { get; init; }
     }
 
     public record OrchestratorVersionProfile
     {
         [JsonPropertyName("orchestrators")]
-        public IEnumerable<Orchestrator> Orchestrators { get; set; }
+        public IEnumerable<Orchestrator> Orchestrators { get; init; }
     }
 
     public record Orchestrator
     {
         [JsonPropertyName("orchestratorType")]
-        public string OrchestratorType { get; set; }
+        public string OrchestratorType { get; init; }
         
         [JsonPropertyName("orchestratorVersion")]
-        public string OrchestratorVersion { get; set; }
+        public string OrchestratorVersion { get; init; }
         
         [JsonPropertyName("upgrades")]
-        public Upgrade[] AvailableUpgrades { get; set; }
+        public Upgrade[] AvailableUpgrades { get; init; }
         
         [JsonPropertyName("default")]
-        public bool? IsDefault { get; set; }
+        public bool? IsDefault { get; init; }
 
         [JsonPropertyName("isPreview")]
-        public bool? IsPreview { get; set; }
+        public bool? IsPreview { get; init; }
     }
 
     public record Upgrade
     {
         [JsonPropertyName("orchestratorType")]
-        public string OrchestratorType { get; set; }
+        public string OrchestratorType { get; init; }
         
         [JsonPropertyName("orchestratorVersion")]
-        public string OrchestratorVersion { get; set; }
+        public string OrchestratorVersion { get; init; }
 
         [JsonPropertyName("isPreview")]
-        public bool? IsPreview { get; set; }
+        public bool? IsPreview { get; init; }
     }
 }
