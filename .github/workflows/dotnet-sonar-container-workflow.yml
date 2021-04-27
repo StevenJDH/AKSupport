@@ -42,24 +42,20 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v1.5
-      with:
-        args: >
-          -Dsonar.organization=stevenjdh
-          -Dsonar.projectKey=StevenJDH_${{ env.IMAGE_NAME }}
-          -Dsonar.coverage.exclusions="**/*.*"
+    - name: Build, Test, and Analyze
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any.
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        dotnet tool install --global dotnet-sonarscanner
+        dotnet sonarscanner begin /k:StevenJDH_${{ env.IMAGE_NAME }} /o:stevenjdh /d:sonar.login=$SONAR_TOKEN \
+            /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="**/*.*"
+        dotnet build --configuration Release --no-restore
+        dotnet test --no-build --verbosity normal
+        dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
 
     - name: Upload Artifact
+      if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/')
       uses: actions/upload-artifact@v2
       with:
         name: repo-src
