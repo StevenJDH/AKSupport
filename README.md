@@ -1,7 +1,16 @@
 # AKSupport
 
+[![build](https://github.com/StevenJDH/AKSupport/actions/workflows/dotnet-sonar-container-workflow.yml/badge.svg?branch=main)](https://github.com/StevenJDH/AKSupport/actions/workflows/dotnet-sonar-container-workflow.yml)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/StevenJDH/AKSupport?include_prereleases)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/15ee917d85e94a3a95f213f923a0b7ba)](https://www.codacy.com/gh/StevenJDH/AKSupport/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=StevenJDH/AKSupport&amp;utm_campaign=Badge_Grade)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=alert_status)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=sqale_index)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Sonar Violations (long format)](https://img.shields.io/sonar/violations/StevenJDH_AKSupport?format=long&server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=security_rating)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=ncloc)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
 ![Maintenance](https://img.shields.io/maintenance/yes/2021)
 ![GitHub](https://img.shields.io/github/license/StevenJDH/AKSupport)
 
@@ -25,6 +34,7 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 
 ## Usage
 The following are the steps needed to set up AKSupport correctly along with the needed API permissions:
+
 1. In a console window, type `az ad sp create-for-rbac -n "AKSupport"` to create a [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) in Azure. Currently, this assigns `Contributor` rights to the SP, but in the future, this will change. Use `--skip-assignment` to skip the role assignment if a more specific role is needed, and then follow the [Steps to assign an Azure role](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps) article. The output from the command should look like the following:
 
    ```json
