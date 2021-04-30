@@ -47,8 +47,8 @@ namespace AKSupport
             }
             else
             {
-                IKubeletService kubelet = new KubeletService();
-                var kBuild = await kubelet.GetBuildInfoAsync();
+                IKubeApiService kubeApi = new KubeApiService();
+                var kBuild = await kubeApi.GetBuildInfoAsync();
                 kVersion = kBuild.GitVersion;
             }
 

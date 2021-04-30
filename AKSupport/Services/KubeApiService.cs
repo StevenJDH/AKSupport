@@ -31,18 +31,18 @@ using AKSupport.Models;
 
 namespace AKSupport.Services
 {
-    class KubeletService : IKubeletService
+    class KubeApiService : IKubeApiService
     {
         private readonly TimeSpan _timeoutSeconds;
         private HttpClient _httpClient;
 
         /// <summary>
-        /// Constructs a new <see cref="KubeletService"/> instance to interact with the Kubelet API.
+        /// Constructs a new <see cref="KubeApiService"/> instance to interact with the kube-apiserver.
         /// </summary>
         /// <param name="timeoutSeconds">
         /// Number of seconds to wait before a request times out. Default is 90 seconds.
         /// </param>
-        public KubeletService(int timeoutSeconds = 90)
+        public KubeApiService(int timeoutSeconds = 90)
         {
             _timeoutSeconds = TimeSpan.FromSeconds(timeoutSeconds);
             CreateHttpClient();
@@ -64,7 +64,7 @@ namespace AKSupport.Services
 
         /// <summary>
         /// Creates a new instance of <see cref="HttpClient"/> with configuration needed to interact
-        /// with the Kubelet API.
+        /// with the kube-apiserver.
         /// </summary>
         private void CreateHttpClient()
         {
@@ -96,7 +96,7 @@ namespace AKSupport.Services
 
         /// <summary>
         /// Releases any unmanaged resources and disposes of the managed resources used
-        /// by the <see cref="KubeletService"/>.
+        /// by the <see cref="KubeApiService"/>.
         /// </summary>
         public void Dispose()
         {

@@ -25,7 +25,7 @@ using AKSupport.Models;
 
 namespace AKSupport.Services
 {
-    interface IKubeletService : IDisposable
+    interface IKubeApiService : IDisposable
     {
         Task<K8SBuildInfo> GetBuildInfoAsync();
     }
