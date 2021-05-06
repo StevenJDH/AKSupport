@@ -20,23 +20,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace AKSupport.Models
 {
-    public record OAuth2Response
+    record EnvironmentConfig
     {
-        [JsonPropertyName("token_type")]
-        public string TokenType { get; init; }
-        
-        [JsonPropertyName("expires_in")]
-        public int ExpiresIn { get; init; }
-        
-        [JsonPropertyName("ext_expires_in")]
-        public int ExtendedExpiresIn { get; init; }
-
-        [JsonPropertyName("access_token")]
-        public string AccessToken { get; init; }
+        public string SubscriptionId { get; init; }
+        public string AppTenant { get; init; }
+        public string AppId { get; init; }
+        public string AppPassword { get; init; }
+        public string AksRegion { get; init; }
+        public string ImageUrl { get; init; }
+        public string AksClusterName { get; init; }
+        public string AksClusterUrl { get; init; }
+        public string ChannelWebhookUrl  { get; init; }
+        public string MailAppTenant { get; init; }
+        public string MailAppId { get; init; }
+        public string MailAppPassword { get; init; }
+        public string SenderId { get; init; }
+        public string RecipientAddress { get; init; }
     }
 }

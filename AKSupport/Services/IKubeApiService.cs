@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using AKSupport.Models;
@@ -27,6 +28,12 @@ namespace AKSupport.Services
 {
     interface IKubeApiService : IDisposable
     {
+        /// <summary>
+        /// Gets the specific build information for a Kubernetes environment asynchronously. This
+        /// method is equivalent to the 'kubectl version' command.
+        /// </summary>
+        /// <returns>Build info such as version, git commit, compiler, build date, etc.</returns>
+        /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
         Task<K8SBuildInfo> GetBuildInfoAsync();
     }
 }

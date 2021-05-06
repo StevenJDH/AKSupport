@@ -22,20 +22,25 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using AKSupport.Models;
 
 namespace AKSupport.Services
 {
-    interface IContainerService : IDisposable
+    interface INotificationService : IDisposable
     {
         /// <summary>
-        /// Gets a list of Kubernetes versions for AKS asynchronously that are currently supported
-        /// by Microsoft. The list also contains the supported upgrade paths for each version
-        /// that is returned up to the latest version available.
+        /// Sends a notification message to the underlining service asynchronously with support details for an AKS
+        /// cluster.
         /// </summary>
-        /// <param name="location">AKS region to use when checking for supported versions.</param>
-        /// <returns>A listed of supported versions and their upgrade paths.</returns>
+        /// <param name="clusterName">Name of AKS cluster.</param>
+        /// <param name="version">Version of Kubernetes used by <paramref name="clusterName"/>.</param>
+        /// <param name="description">Support description for <paramref name="clusterName"/>.</param>
+        /// <param name="status">
+        /// 'Not Supported' or 'Support Ending Soon' status for <paramref name="clusterName"/>.
+        /// </param>
+        /// <param name="clusterUrl">Optional Azure Portal URL for <paramref name="clusterName"/>.</param>
+        /// <returns><see langword="true"/> if notification was successful, <see langword="false"/> if not.</returns>
         /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-        Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location);
+        Task<bool> SendNotificationAsync(string clusterName, string version, string description, string status, 
+            string clusterUrl);
     }
 }

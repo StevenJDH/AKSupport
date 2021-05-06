@@ -31,7 +31,7 @@ using AKSupport.Models;
 
 namespace AKSupport.Services
 {
-    class KubeApiService : IKubeApiService
+    sealed class KubeApiService : IKubeApiService
     {
         private readonly TimeSpan _timeoutSeconds;
         private HttpClient _httpClient;
@@ -49,9 +49,10 @@ namespace AKSupport.Services
         }
 
         /// <summary>
-        /// 
+        /// Gets the specific build information for a Kubernetes environment asynchronously. This
+        /// method is equivalent to the 'kubectl version' command.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Build info such as version, git commit, compiler, build date, etc.</returns>
         /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
         public async Task<K8SBuildInfo> GetBuildInfoAsync()
         {
@@ -98,9 +99,6 @@ namespace AKSupport.Services
         /// Releases any unmanaged resources and disposes of the managed resources used
         /// by the <see cref="KubeApiService"/>.
         /// </summary>
-        public void Dispose()
-        {
-            _httpClient?.Dispose();
-        }
+        public void Dispose() => _httpClient?.Dispose();
     }
 }

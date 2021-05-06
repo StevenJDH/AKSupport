@@ -22,20 +22,26 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using AKSupport.Models;
 
 namespace AKSupport.Services
 {
-    interface IContainerService : IDisposable
+    interface IOAuth2Service
     {
         /// <summary>
-        /// Gets a list of Kubernetes versions for AKS asynchronously that are currently supported
-        /// by Microsoft. The list also contains the supported upgrade paths for each version
-        /// that is returned up to the latest version available.
+        /// Obtains an access token asynchronously using Client Credentials grant flow that permits
+        /// machine-to-machine (M2M) applications such as CLIs, daemons, or services running on the back-end
+        /// to call other services outside of the context of a user.
         /// </summary>
-        /// <param name="location">AKS region to use when checking for supported versions.</param>
-        /// <returns>A listed of supported versions and their upgrade paths.</returns>
+        /// <param name="client">The <see cref="HttpClient"/> instance to use for obtaining the token.</param>
+        /// <param name="scope">
+        /// The resource identifier (application ID URI) of the resource to be accessed, affixed with the
+        /// .default suffix. For example, Microsoft Graph APIs use the value
+        /// https://graph.microsoft.com/.default. This value tells the Microsoft identity platform that of
+        /// all the direct application permissions configured for an application, the endpoint should issue a
+        /// token for the ones associated with the resource that will be used.
+        /// </param>
+        /// <returns>An OAuth 2.0 access token for M2M.</returns>
         /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-        Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location);
+        Task<string> GetAuthorizeTokenAsync(HttpClient client, string scope);
     }
 }
