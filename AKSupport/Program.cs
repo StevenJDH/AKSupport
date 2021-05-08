@@ -60,7 +60,7 @@ namespace AKSupport
                 if (!IsSupported(kVersion, aksVersions))
                 {
                     Console.WriteLine("{0,-36:o} Version {1} is no longer supported.", DateTimeOffset.UtcNow, kVersion);
-                    await NotifyAsync(kVersion, hasSupportEnded: true);
+                    await NotifyAsync(kVersion, hasSupportEnded: true).ConfigureAwait(false);
 
                     return 2;
                 }
@@ -68,7 +68,7 @@ namespace AKSupport
                 if (IsSupportEnding(kVersion, aksVersions))
                 {
                     Console.WriteLine("{0,-36:o} Support is ending for version {1} soon.", DateTimeOffset.UtcNow, kVersion);
-                    await NotifyAsync(kVersion, hasSupportEnded: false);
+                    await NotifyAsync(kVersion, hasSupportEnded: false).ConfigureAwait(false);
 
                     return 3;
                 }
