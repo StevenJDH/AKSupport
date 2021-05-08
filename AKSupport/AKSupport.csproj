@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <NoWarn>1701;1702;S1075;S3881;S4830</NoWarn>
+    <NoWarn>1701;1702;S1075;S4830</NoWarn>
     <Description>An automation tool that regularly checks for the current supported status of an AKS cluster to alert and maintain Microsoft support.</Description>
     <Copyright>Copyright © 2021</Copyright>
     <Authors>Steven Jenkins De Haro</Authors>
