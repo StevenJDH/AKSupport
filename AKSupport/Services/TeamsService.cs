@@ -79,6 +79,10 @@ namespace AKSupport.Services
         /// <summary>
         /// Gets a specially formatted message that can be sent as an actionable card to the Teams service.
         /// </summary>
+        /// <remarks>
+        /// The older Message Card format will be used because it is still not possible to send messages
+        /// using the Adaptive Card format to an incoming webhook of a Teams channel.
+        /// </remarks>
         /// <param name="clusterName">Name of AKS cluster.</param>
         /// <param name="version">Version of Kubernetes used by <paramref name="clusterName"/>.</param>
         /// <param name="description">Support description for <paramref name="clusterName"/>.</param>
