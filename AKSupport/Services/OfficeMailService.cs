@@ -121,47 +121,110 @@ namespace AKSupport.Services
         private string GetHtmlCardTemplate(string clusterName, string version, string description,
             string status, string clusterUrl)
         {
-            string card = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"> " +
-                       "<script type=\"application/adaptivecard+json\">" +
-                       "{\"$schema\":\"http://adaptivecards.io/schemas/adaptive-card.json\"," +
-                       "\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"ColumnSet\"," +
-                       "\"id\":\"1ede2aba-61b9-faa0-9895-9ed0c26b2e6f\",\"columns\":[{\"type\":\"Column\"," +
-                       "\"id\":\"e5756242-0963-37a2-7cb4-4397886d60bb\",\"padding\":\"None\",\"width\":\"stretch\"," +
-                       "\"items\":[{\"type\":\"TextBlock\",\"id\":\"20f3833e-0435-5c87-fad1-b528e0046fb6\"," +
-                       $"\"text\":\"Automated Alert - {DateTimeOffset.Now:yyyy/MM/dd, HH:mm \"GMT\"z}\",\"wrap\":true}}]," +
-                       "\"verticalContentAlignment\":\"Center\"},{\"type\":\"Column\"," +
-                       "\"id\":\"74215a26-fa8b-e549-cced-7f99fd34a661\",\"padding\":\"None\",\"width\":\"auto\"," +
-                       "\"items\":[{\"type\":\"Image\",\"id\":\"795047e2-e63e-6e14-07ba-5a3e13323dff\"," +
-                       $"\"url\":\"{_imageUrl}\"," +
-                       "\"size\":\"Small\"}],\"horizontalAlignment\":\"Right\"}],\"padding\":{\"top\":\"Small\"," +
-                       "\"bottom\":\"Small\",\"left\":\"Default\",\"right\":\"Small\"},\"style\":\"emphasis\"}," +
-                       "{\"type\":\"Container\",\"id\":\"fbcee869-2754-287d-bb37-145a4ccd750b\"," +
-                       "\"padding\":\"Default\",\"spacing\":\"None\",\"items\":[{\"type\":\"TextBlock\"," +
-                       "\"id\":\"44906797-222f-9fe2-0b7a-e3ee21c6e380\"," +
-                       "\"text\":\"AKSupport Alert: AKS cluster needs attention\",\"wrap\":true,\"weight\":\"Bolder\"," +
-                       "\"size\":\"Large\"},{\"type\":\"TextBlock\",\"id\":\"f7abdf1a-3cce-2159-28ef-f2f362ec937e\"," +
-                       $"\"text\":\"{description}\"," +
-                       "\"wrap\":true},{\"type\":\"FactSet\",\"id\":\"9bfc0c85-3e8e-0d3c-66ba-8d83e02b7e24\"," +
-                       $"\"facts\":[{{\"title\":\"Cluster:\",\"value\":\"{clusterName}\"}}," +
-                       $"{{\"title\":\"Running:\",\"value\":\"{version}\"}}," +
-                       $"{{\"title\":\"Status:\",\"value\":\"{status}\"}}]}},{{\"type\":\"ActionSet\"," +
-                       "\"id\":\"c8a5ba7e-7ec6-53ae-79da-0cfb952a527e\",\"actions\":[{\"type\":\"Action.OpenUrl\"," +
-                       "\"id\":\"fc2f1ec7-b819-2f3b-e874-1be376092f86\",\"title\":\"View AKS Cluster\"," +
-                       $"\"url\":\"{clusterUrl}\",\"style\":\"positive\",\"isPrimary\":true}}," +
-                       "{\"type\":\"Action.OpenUrl\",\"id\":\"730628aa-d6ed-edfb-7273-37631a8c577b\"," +
-                       "\"title\":\"Version Support Policy\"," +
-                       "\"url\":\"https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions#" +
-                       "kubernetes-version-support-policy\"}]}]}," +
-                       "{\"type\":\"Container\",\"id\":\"77102c5d-fde2-e573-4ea5-66022d646d64\"," +
-                       "\"padding\":{\"top\":\"Small\",\"bottom\":\"Small\",\"left\":\"Small\",\"right\":\"Default\"}," +
-                       "\"spacing\":\"None\",\"separator\":true,\"items\":[{\"type\":\"TextBlock\"," +
-                       "\"id\":\"42654e7e-cece-b419-867a-3e3ef4076870\"," +
-                       "\"text\":\"[AKSupport on GitHub](https://github.com/StevenJDH/AKSupport)\"," +
-                       "\"wrap\":true,\"color\":\"Accent\",\"horizontalAlignment\":\"Right\"}]," +
-                       "\"horizontalAlignment\":\"Right\",\"style\":\"emphasis\"}],\"padding\":\"None\"}" +
-                       "</script> </head><body></body></html>";
+            var header = new AdaptiveColumn
+            {
+                Width = "stretch",
+                Items = new object[] { new AdaptiveTextBlock
+                {
+                    Text = $"Automated Alert - {DateTimeOffset.Now:yyyy/MM/dd, HH:mm \"GMT\"z}"
+                }},
+                VerticalContentAlignment = "Center"
+            };
 
-            return card;
+            var headerImage = new AdaptiveColumn
+            {
+                Items = new object[] { new AdaptiveImage
+                {
+                    Url = _imageUrl
+                }},
+                HorizontalAlignment = "Right"
+            };
+
+            var body = new AdaptiveContainer
+            {
+                Padding = new AdaptivePadding(), // Default padding.
+                Items = new object[]
+                {
+                    new AdaptiveTextBlock
+                    {
+                        Text = "AKSupport Alert: \"AKS cluster needs attention\"",
+                        Weight = "Bolder",
+                        Size = "Large"
+                    },
+                    new AdaptiveTextBlock { Text = description },
+                    new AdaptiveGenericSet
+                    {
+                        Type = "FactSet",
+                        Facts = new[]
+                        {
+                            new AdaptiveFact { Title = "Cluster:", Value = clusterName },
+                            new AdaptiveFact { Title = "Running:", Value = version },
+                            new AdaptiveFact { Title = "Status:", Value = status }
+                        }
+                    },
+                    new AdaptiveGenericSet
+                    {
+                        Type = "ActionSet",
+                        Actions = new[]
+                        {
+                            new AdaptiveAction
+                            {
+                                Title = "View AKS Cluster",
+                                Url = clusterUrl,
+                                Style = "positive",
+                                IsPrimary = true
+                            },
+                            new AdaptiveAction
+                            {
+                                Title = "Version Support Policy",
+                                Url = "https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes" +
+                                      "-versions#kubernetes-version-support-policy"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var footer = new AdaptiveContainer
+            {
+                Padding = new AdaptivePadding { Top = "Small", Bottom = "Small", Left = "Small" },
+                Separator = true,
+                Items = new object[]
+                {
+                    new AdaptiveTextBlock
+                    {
+                        Text = "[AKSupport on GitHub](https://github.com/StevenJDH/AKSupport)",
+                        Color = "Accent",
+                        HorizontalAlignment = "Right"
+                    }
+                },
+                HorizontalAlignment = "Right",
+                Style = "emphasis"
+            };
+
+            var card = new MailCard
+            {
+                Groups = new object[]
+                {
+                    new AdaptiveColumnSet
+                    {
+                        Columns = new[] { header, headerImage },
+                        Padding = new AdaptivePadding { Top = "Small", Bottom = "Small", Right = "Small" },
+                        Style = "emphasis"
+                    },
+                    body,
+                    footer
+                }
+            };
+
+            var sb = new StringBuilder();
+
+            sb.Append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            sb.Append("<script type=\"application/adaptivecard+json\">");
+            sb.Append(JsonSerializer.Serialize(card, new JsonSerializerOptions { IgnoreNullValues = true }));
+            sb.Append("</script> </head><body></body></html>");
+
+            return sb.ToString();
         }
 
         /// <summary>
