@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1beta1 # Use 'batch/v1' for K8s v1.21+.
 kind: CronJob
 metadata:
   name: aksupport-cronjob
@@ -22,6 +22,9 @@ spec:
             #args:
             #- "1.17.0"
             imagePullPolicy: Always
+            env:
+            - name: AZMON_COLLECT_ENV # Required to prevent sensitive data leaking to Azure Monitor Logs.
+              value: "FALSE"
             envFrom:
             - configMapRef:
                 name: aksupport-config
