@@ -7,3 +7,12 @@ data:
   AZURE_APP_TENANT: <tenant>
   AZURE_APP_ID: <appId>
   AZURE_AKS_REGION: <region>
+  # Teams and Office Mail configuration.
+  AVATAR_IMAGE_URL: https://raw.githubusercontent.com/StevenJDH/AKSupport/main/Avatars/aksupport-256x256-transparent-bg.png
+  AZURE_AKS_CLUSTER_NAME: <cluster-name>
+  AZURE_AKS_CLUSTER_URL: <cluster-url>
+  # Office Mail configuration.
+  MAIL_APP_TENANT: <office-tenant>
+  MAIL_APP_ID: <office-appId>
+  MAIL_SENDER_ID: <objectId-or-email-address>
+  MAIL_RECIPIENT_ADDRESS: <email-address>
