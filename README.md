@@ -103,7 +103,7 @@ This integration is the most flexible because, although it uses Container Insigh
 4. Click `New alert rule` located at the top of the query window.
 5. Configure the rule using following screenshot as an example:
 
-   ![Create Rule Screenshot](Images/Create-Rule.jpg "Screenshot")
+   <img src="Images/Create-Rule.jpg" alt="Create Rule Screenshot" title="Screenshot" width="550"/>
 
 6. Click `Next: Actions >` below, and select or create a new action group. If you are creating a new action group, under the `Notifications` tab, select the `Email\SMS message\Push\Voice` option to get the window that will let you use any of these features.
 7. Finally, before finishing the rule creation process, make sure to enable `Mute actions` with the desired period of time in the `Advance options` section under the `Details` tab.
@@ -112,7 +112,7 @@ Once configured, the alert rule will trigger the logic defined in the action gro
 
 ### Teams integration 
 
-![Teams Notification Screenshot](Images/Teams.png "Screenshot")
+<img src="Images/Teams.png" alt="Teams Notification Screenshot" title="Screenshot" width="600"/>
 
 To enable the integration support with Teams, [add an incoming webhook to a Teams channel](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook#add-an-incoming-webhook-to-a-teams-channel) for where you would like to receive the AKSupport notifications. Name the webhook `AKSupport`, and recreate the Secret created in the [Usage](#usage) section to include the `TEAMS_CHANNEL_WEBHOOK_URL` key with the generated webhook URL as its value. Add `AVATAR_IMAGE_URL`, `AZURE_AKS_CLUSTER_NAME`, and `AZURE_AKS_CLUSTER_URL` as additional keys to the ConfigMap from the same section to define the notification avatar image, cluster name, and Azure Portal URL for the cluster. The following is an example with the additional keys:
 
@@ -139,7 +139,7 @@ Notifications that arrive to the defined Teams channel will use the Message Card
 
 ### Office Mail integration
 
-![Mail Notification Screenshot](Images/Mail.png "Screenshot")
+<img src="Images/Mail.png" alt="Mail Notification Screenshot" title="Screenshot" width="600"/>
 
 To enable the integration with Office Mail, a separate Service Principal needs to be created first for an Office Tenant, not an Azure Tenant. The easiest way to do this is from the [Office 365 Active Directory](https://aad.portal.azure.com) page using the [App registrations](https://aad.portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps) blade if the tenant is not located in an Azure subscription. Perform the following steps to set up the Service Principal with the correct permissions:
 
@@ -172,7 +172,7 @@ With the Application (Client) ID and Directory (Tenant) ID from the Overview bla
        --from-literal=AZURE_AKS_CLUSTER_NAME=<cluster-name> \
        --from-literal=AZURE_AKS_CLUSTER_URL=<cluster-url>
    ```
-> :pencil:**NOTE:** For `MAIL_SENDER_ID`, it is recommended to use the user's `Object ID` for privacy as opposed to their email address. See [Find the user object ID](https://docs.microsoft.com/en-us/partner-center/find-ids-and-domain-names#find-the-user-object-id) for more information.
+> 📝**NOTE:** For `MAIL_SENDER_ID`, it is recommended to use the user's `Object ID` for privacy as opposed to their email address. See [Find the user object ID](https://docs.microsoft.com/en-us/partner-center/find-ids-and-domain-names#find-the-user-object-id) for more information.
 
 Notifications that arrive to the defined recipient email address will use the Adaptive Card format for [Actionable Messages](https://docs.microsoft.com/en-us/outlook/actionable-messages/#outlook-version-requirements-for-actionable-messages). Finally, as an additional security step, since this mail workflow uses the `Application permissions` approach instead of the `Delegated permissions` approach, an application security policy should be implemented to restrict access to one user account for sender as opposed to any user account, which is the default. See [Scoping application permissions to specific Exchange Online mailboxes](https://docs.microsoft.com/en-us/graph/auth-limit-mailbox-access) for steps on how to create the needed policy.
 
