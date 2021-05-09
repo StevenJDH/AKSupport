@@ -126,7 +126,7 @@ To enable the integration support with Teams, [add an incoming webhook to a Team
 **ConfigMap:**
 
    ```bash
-   kubectl create configmap aksupport-config -from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
+   kubectl create configmap aksupport-config --from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
        --from-literal=AZURE_APP_TENANT=<tenant> \
        --from-literal=AZURE_APP_ID=<appId> \
        --from-literal=AZURE_AKS_REGION=<region> \
@@ -160,7 +160,7 @@ With the Application (Client) ID and Directory (Tenant) ID from the Overview bla
 **ConfigMap:**
 
    ```bash
-   kubectl create configmap aksupport-config -from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
+   kubectl create configmap aksupport-config --from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
        --from-literal=AZURE_APP_TENANT=<tenant> \
        --from-literal=AZURE_APP_ID=<appId> \
        --from-literal=AZURE_AKS_REGION=<region> \
