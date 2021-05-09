@@ -28,7 +28,7 @@ namespace AKSupport.Models
     public record MailCard
     {
         [JsonPropertyName("$schema")]
-        public string Schema { get; init; } = "http://adaptivecards.io/schemas/adaptive-card.json";
+        public string Schema { get; init; } = "https://adaptivecards.io/schemas/adaptive-card.json";
 
         [JsonPropertyName("type")]
         public string Type { get; init; } = "AdaptiveCard";
