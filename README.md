@@ -35,6 +35,7 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 * An Azure [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) for API access.
 * An Office 365 tenant with Service Principal for Mail and Teams features.
 * A [supported Office 365 version or Outlook client](https://docs.microsoft.com/en-us/outlook/actionable-messages/#outlook-version-requirements-for-actionable-messages) for actionable message cards.
+* [Terraform](https://www.terraform.io/downloads.html) 0.15.x for POC only.
 
 ## Usage
 The following are the steps needed to set up AKSupport correctly along with the needed API permissions:
@@ -216,6 +217,36 @@ kubectl logs <aksupport-cronjob-00-00>
 ```
 
 In the logs, there will be additional information for the result of the check or any errors that occurred.
+
+## Terraform
+
+Included is a POC created using Terraform for Infrastructure as Code (IaC) to quickly create a working test environment. The POC includes an AKS instance, Container Insights, an Action Group for email alerts, and all the Kubernetes resources, but the Azure Monitor [Log alert rule](#azure-monitor-integration) will have to be created manually if needed as this is [not yet supported](https://github.com/terraform-providers/terraform-provider-azurerm/issues/4395). To create the POC, perform the following steps:
+
+1. Change to the `Terraform` directory, and initialize the POC:
+   
+   ```bash
+   terraform init
+   ```
+
+2. Create a new plan with only Azure Monitor integration:
+
+   ```bash
+   terraform plan -var subscription_id=xxx -var app_tenant_id=xxx -var app_id=xxx -var app_password=xxx -var prep_for_azure_monitor_alert=true -var mail_recipient_address=xxx -out aksupport.tfplan
+   ```
+
+3. Create the resources based on the plan:
+
+   ```bash
+   terraform apply "aksupport.tfplan"
+   ```
+
+4. Explore the POC, and when done, delete it using the same variables as before:
+
+   ```bash
+   terraform destroy -var subscription_id=xxx -var app_tenant_id=xxx -var app_id=xxx -var app_password=xxx -var prep_for_azure_monitor_alert=true -var mail_recipient_address=xxx
+   ```
+
+The `prep_for_azure_monitor_alert` variable controls whether extra resources are created for the Azure Monitor integration like Container Insights. If they are not, then set that variable to `false` and remove the `mail_recipient_address` variable unless the Office Mail configuration is being used. The `variables.tf` file contains all variables needed for additional configurations. For testing with specific version like in the [Testing](#testing) section, add `-var version_test=[\"1.17.0\"]` with escaped quotes if using Windows, or `-var version_test=["1.17.0"]` if not, to the `terraform plan` and `terraform destroy` steps.
 
 ## Disclaimer
 AKSupport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
