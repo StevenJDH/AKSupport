@@ -63,6 +63,9 @@ jobs:
           ${{ github.workspace }}
           !.git/
           !.github/
+          !Avatars/
+          !Images/
+          !Terraform/
           !YAML/
           !*/bin/
           !*/obj/
