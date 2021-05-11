@@ -61,7 +61,7 @@ The following are the steps needed to set up AKSupport correctly along with the 
 3. Create a Kubernetes ConfigMap in AKS for the SP appId and tenant fields along with the AKS subscription ID and region by typing:
 
    ```bash
-   kubectl create configmap aksupport-config -from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
+   kubectl create configmap aksupport-config --from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
        --from-literal=AZURE_APP_TENANT=<tenant> \
        --from-literal=AZURE_APP_ID=<appId> \
        --from-literal=AZURE_AKS_REGION=<region>
@@ -82,7 +82,6 @@ The following are the steps needed to set up AKSupport correctly along with the 
 In addition to the imperative commands used to create the Secret and the ConfigMap above, YAML versions have also been provided if a declarative approach is preferred. Just remember to [Base64 encode](https://www.base64encode.net/) any values defined in the Secret when using YAML.
 
 ## Configuring notifications
-
 AKSupport currently supports integrating with Azure Monitor, Teams, and Office Mail as inclusive methods for issuing notifications when the support status of a cluster requires attention. The method or methods chosen will depend on preference and any security policies that an individual or organization must follow.
 
 ### Azure Monitor integration
@@ -207,7 +206,7 @@ containers:
 ...
 ```
 
-Also, change the `schedule` field to `* * * * *` to run AKSupport every minute while testing or to any other [cron expression](https://crontab.guru/) as needed. Use `az aks get-versions --location northeurope --output table` to see what versions are currently supported for a particular region and their upgrade paths as a reference.
+Also, change the `schedule` field to `* * * * *` to run AKSupport every minute while testing or to any other [cron expression](https://crontab.guru/) as needed. Use `az aks get-versions --location <region> --output table` to see what versions are currently supported for a particular region and their upgrade paths as a reference.
 
 ## Additional information
 When AKSupport finishes checking the environment, the underlying Pod will either have a `Completed` status or an `Error` status by design. Only the last state will be visible at any given time. To view the logs for the last run of the Pod, type:
@@ -219,7 +218,6 @@ kubectl logs <aksupport-cronjob-00-00>
 In the logs, there will be additional information for the result of the check or any errors that occurred.
 
 ## Terraform
-
 Included is a POC created using Terraform for Infrastructure as Code (IaC) to quickly create a working test environment. The POC includes an AKS instance, Container Insights, an Action Group for email alerts, and all the Kubernetes resources, but the Azure Monitor [Log alert rule](#azure-monitor-integration) will have to be created manually if needed as this is [not yet supported](https://github.com/terraform-providers/terraform-provider-azurerm/issues/4395). To create the POC, perform the following steps:
 
 1. Change to the `Terraform` directory, and initialize the POC:
@@ -247,6 +245,9 @@ Included is a POC created using Terraform for Infrastructure as Code (IaC) to qu
    ```
 
 The `prep_for_azure_monitor_alert` variable controls whether extra resources are created for the Azure Monitor integration like Container Insights. If they are not, then set that variable to `false` and remove the `mail_recipient_address` variable unless the Office Mail configuration is being used. The `variables.tf` file contains all variables needed for additional configurations. For testing with specific version like in the [Testing](#testing) section, add `-var version_test=[\"1.17.0\"]` with escaped quotes if using Windows, or `-var version_test=["1.17.0"]` if not, to the `terraform plan` and `terraform destroy` steps.
+
+## Container registries
+AKSupport container images are hosted on the [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport) and the [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport). For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
 
 ## Disclaimer
 AKSupport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
