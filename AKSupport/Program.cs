@@ -38,7 +38,6 @@ namespace AKSupport
             RegisterNotificationServices();
             
             string kVersion;
-            IEnumerable<Orchestrator> aksVersions;
 
             try
             {
@@ -55,7 +54,7 @@ namespace AKSupport
 
                 IOAuth2Service auth2 = new OAuth2Service(Env.AppTenant, Env.AppId, Env.AppPassword);
                 IContainerService aks = new ContainerService(Env.SubscriptionId, auth2);
-                aksVersions = await aks.GetSupportedVersionsAsync(Env.AksRegion);
+                var aksVersions = await aks.GetSupportedVersionsAsync(Env.AksRegion);
 
                 if (!IsSupported(kVersion, aksVersions))
                 {
