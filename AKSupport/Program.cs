@@ -34,6 +34,7 @@ namespace AKSupport
 
         static async Task<int> Main(string[] args)
         {
+            Console.WriteLine(GetLogo());
             Console.WriteLine("{0,-36:o} Checking AKS support status...", DateTimeOffset.UtcNow);
             RegisterNotificationServices();
             
@@ -194,6 +195,29 @@ namespace AKSupport
             }
 
             _services = services;
+        }
+
+        /// <summary>
+        /// Gets a logo that is generated with author and version information.
+        /// </summary>
+        /// <returns>Text-based application logo.</returns>
+        private static string GetLogo()
+        {
+            var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
+            return $@"
+  /######  /##   /##  /######                                                      /##
+ /##__  ##| ##  /##/ /##__  ##                                                    | ##
+| ##  \ ##| ## /##/ | ##  \__/ /##   /##  /######   /######   /######   /######  /######
+| ########| #####/  |  ###### | ##  | ## /##__  ## /##__  ## /##__  ## /##__  ##|_  ##_/
+| ##__  ##| ##  ##   \____  ##| ##  | ##| ##  \ ##| ##  \ ##| ##  \ ##| ##  \__/  | ##
+| ##  | ##| ##\  ##  /##  \ ##| ##  | ##| ##  | ##| ##  | ##| ##  | ##| ##        | ## /##
+| ##  | ##| ## \  ##|  ######/|  ######/| #######/| #######/|  ######/| ##        |  ####/
+|__/  |__/|__/  \__/ \______/  \______/ | ##____/ | ##____/  \______/ |__/         \___/
+                                        | ##      | ##       Steven Jenkins De Haro v{v!.Major}.{v.Minor}.{v.Build}
+                                        | ##      | ##
+                                        |__/      |__/
+                    "[2..]; // Removes the initial newline with substring range index.
         }
     }
 }
