@@ -11,7 +11,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=security_rating)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=ncloc)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
-![Maintenance](https://img.shields.io/maintenance/yes/2021)
+![Maintenance](https://img.shields.io/maintenance/yes/2022)
 ![GitHub](https://img.shields.io/github/license/StevenJDH/AKSupport)
 
 AKSupport is an automation tool that regularly checks for the current supported status of an AKS cluster to alert those interested that an upgrade is needed to maintain Microsoft support. In other words, rather than always manually checking different AKS clusters across multiple environments to keep up with the [Kubernetes version support policy](https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions#kubernetes-version-support-policy), AKSupport will manage all of this for you. This also covers situations where a supported version is pulled early by Microsoft due to security concerns or other critical issues, which they reserve the right to do. In the end, the goal is to free people up for other value-add tasks by keeping things simple for the many uses cases that can benefit from such a tool like general maintenance, Infrastructure as Code (IaC) deployments, etc.
@@ -258,6 +258,13 @@ Thanks for your interest in contributing! There are many ways to contribute to t
 ## Do you have any questions?
 Many commonly asked questions are answered in the FAQ:
 [https://github.com/StevenJDH/AKSupport/wiki/FAQ](https://github.com/StevenJDH/AKSupport/wiki/FAQ)
+
+## Need to contact me?
+Feel free to contact me with any questions you may have, and I'll make sure to answer them as soon as possible!
+
+| Platform  | Link        |
+|:----------|:------------|
+| 💬 Instant Message Chat (preferred) | [![Discord Banner](https://discord.com/api/guilds/851210657318961233/widget.png?style=banner2)](https://discord.gg/VzzzjetTkT)
 
 ## Want to show your support?
 
