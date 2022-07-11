@@ -1,6 +1,6 @@
-﻿/**
+﻿/*
  * This file is part of AKSupport <https://github.com/StevenJDH/AKSupport>.
- * Copyright (C) 2021 Steven Jenkins De Haro.
+ * Copyright (C) 2021-2022 Steven Jenkins De Haro.
  *
  * AKSupport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,23 +22,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AKSupport.Models
+namespace AKSupport.Models;
+
+record EnvironmentConfig
 {
-    record EnvironmentConfig
-    {
-        public string SubscriptionId { get; init; }
-        public string AppTenant { get; init; }
-        public string AppId { get; init; }
-        public string AppPassword { get; init; }
-        public string AksRegion { get; init; }
-        public string ImageUrl { get; init; }
-        public string AksClusterName { get; init; }
-        public string AksClusterUrl { get; init; }
-        public string ChannelWebhookUrl  { get; init; }
-        public string MailAppTenant { get; init; }
-        public string MailAppId { get; init; }
-        public string MailAppPassword { get; init; }
-        public string SenderId { get; init; }
-        public string RecipientAddress { get; init; }
-    }
+    public string SubscriptionId { get; init; }
+    public string AppTenant { get; init; }
+    public string AppId { get; init; }
+    public string AppPassword { get; init; }
+    public string AksRegion { get; init; }
+    public string ImageUrl { get; init; }
+    public string AksClusterName { get; init; }
+    public string AksClusterUrl { get; init; }
+    public string ChannelWebhookUrl  { get; init; }
+    public string MailAppTenant { get; init; }
+    public string MailAppId { get; init; }
+    public string MailAppPassword { get; init; }
+    public string SenderId { get; init; }
+    public string RecipientAddress { get; init; }
 }

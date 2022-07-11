@@ -1,6 +1,6 @@
-﻿/**
+﻿/*
  * This file is part of AKSupport <https://github.com/StevenJDH/AKSupport>.
- * Copyright (C) 2021 Steven Jenkins De Haro.
+ * Copyright (C) 2021-2022 Steven Jenkins De Haro.
  *
  * AKSupport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,20 +23,19 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AKSupport.Models
-{
-    public record OAuth2Response
-    {
-        [JsonPropertyName("token_type")]
-        public string TokenType { get; init; }
-        
-        [JsonPropertyName("expires_in")]
-        public int ExpiresIn { get; init; }
-        
-        [JsonPropertyName("ext_expires_in")]
-        public int ExtendedExpiresIn { get; init; }
+namespace AKSupport.Models;
 
-        [JsonPropertyName("access_token")]
-        public string AccessToken { get; init; }
-    }
+public record OAuth2Response
+{
+    [JsonPropertyName("token_type")]
+    public string TokenType { get; init; }
+    
+    [JsonPropertyName("expires_in")]
+    public int ExpiresIn { get; init; }
+    
+    [JsonPropertyName("ext_expires_in")]
+    public int ExtendedExpiresIn { get; init; }
+
+    [JsonPropertyName("access_token")]
+    public string AccessToken { get; init; }
 }

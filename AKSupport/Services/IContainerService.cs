@@ -1,6 +1,6 @@
-﻿/**
+﻿/*
  * This file is part of AKSupport <https://github.com/StevenJDH/AKSupport>.
- * Copyright (C) 2021 Steven Jenkins De Haro.
+ * Copyright (C) 2021-2022 Steven Jenkins De Haro.
  *
  * AKSupport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,18 +24,17 @@ using System.Text;
 using System.Threading.Tasks;
 using AKSupport.Models;
 
-namespace AKSupport.Services
+namespace AKSupport.Services;
+
+interface IContainerService : IDisposable
 {
-    interface IContainerService : IDisposable
-    {
-        /// <summary>
-        /// Gets a list of Kubernetes versions for AKS asynchronously that are currently supported
-        /// by Microsoft. The list also contains the supported upgrade paths for each version
-        /// that is returned up to the latest version available.
-        /// </summary>
-        /// <param name="location">AKS region to use when checking for supported versions.</param>
-        /// <returns>A listed of supported versions and their upgrade paths.</returns>
-        /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-        Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location);
-    }
+    /// <summary>
+    /// Gets a list of Kubernetes versions for AKS asynchronously that are currently supported
+    /// by Microsoft. The list also contains the supported upgrade paths for each version
+    /// that is returned up to the latest version available.
+    /// </summary>
+    /// <param name="location">AKS region to use when checking for supported versions.</param>
+    /// <returns>A listed of supported versions and their upgrade paths.</returns>
+    /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
+    Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location);
 }

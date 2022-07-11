@@ -1,6 +1,6 @@
-﻿/**
+﻿/*
  * This file is part of AKSupport <https://github.com/StevenJDH/AKSupport>.
- * Copyright (C) 2021 Steven Jenkins De Haro.
+ * Copyright (C) 2021-2022 Steven Jenkins De Haro.
  *
  * AKSupport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,59 +23,58 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AKSupport.Models
+namespace AKSupport.Models;
+
+public record AksManagedClusters
 {
-    public record AksManagedClusters
-    {
-        [JsonPropertyName("id")]
-        public string Id { get; init; }
-        
-        [JsonPropertyName("name")]
-        public string Name { get; init; }
-        
-        [JsonPropertyName("type")]
-        public string Type { get; init; }
-        
-        [JsonPropertyName("properties")]
-        public OrchestratorVersionProfile VersionProfile { get; init; }
+    [JsonPropertyName("id")]
+    public string Id { get; init; }
+    
+    [JsonPropertyName("name")]
+    public string Name { get; init; }
+    
+    [JsonPropertyName("type")]
+    public string Type { get; init; }
+    
+    [JsonPropertyName("properties")]
+    public OrchestratorVersionProfile VersionProfile { get; init; }
 
-        [JsonPropertyName("orchestrators")]
-        public IEnumerable<Orchestrator> Orchestrators { get; init; }
-    }
+    [JsonPropertyName("orchestrators")]
+    public IEnumerable<Orchestrator> Orchestrators { get; init; }
+}
 
-    public record OrchestratorVersionProfile
-    {
-        [JsonPropertyName("orchestrators")]
-        public IEnumerable<Orchestrator> Orchestrators { get; init; }
-    }
+public record OrchestratorVersionProfile
+{
+    [JsonPropertyName("orchestrators")]
+    public IEnumerable<Orchestrator> Orchestrators { get; init; }
+}
 
-    public record Orchestrator
-    {
-        [JsonPropertyName("orchestratorType")]
-        public string OrchestratorType { get; init; }
-        
-        [JsonPropertyName("orchestratorVersion")]
-        public string OrchestratorVersion { get; init; }
-        
-        [JsonPropertyName("upgrades")]
-        public Upgrade[] AvailableUpgrades { get; init; }
-        
-        [JsonPropertyName("default")]
-        public bool? IsDefault { get; init; }
+public record Orchestrator
+{
+    [JsonPropertyName("orchestratorType")]
+    public string OrchestratorType { get; init; }
+    
+    [JsonPropertyName("orchestratorVersion")]
+    public string OrchestratorVersion { get; init; }
+    
+    [JsonPropertyName("upgrades")]
+    public Upgrade[] AvailableUpgrades { get; init; }
+    
+    [JsonPropertyName("default")]
+    public bool? IsDefault { get; init; }
 
-        [JsonPropertyName("isPreview")]
-        public bool? IsPreview { get; init; }
-    }
+    [JsonPropertyName("isPreview")]
+    public bool? IsPreview { get; init; }
+}
 
-    public record Upgrade
-    {
-        [JsonPropertyName("orchestratorType")]
-        public string OrchestratorType { get; init; }
-        
-        [JsonPropertyName("orchestratorVersion")]
-        public string OrchestratorVersion { get; init; }
+public record Upgrade
+{
+    [JsonPropertyName("orchestratorType")]
+    public string OrchestratorType { get; init; }
+    
+    [JsonPropertyName("orchestratorVersion")]
+    public string OrchestratorVersion { get; init; }
 
-        [JsonPropertyName("isPreview")]
-        public bool? IsPreview { get; init; }
-    }
+    [JsonPropertyName("isPreview")]
+    public bool? IsPreview { get; init; }
 }

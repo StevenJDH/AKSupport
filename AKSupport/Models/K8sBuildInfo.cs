@@ -1,6 +1,6 @@
-﻿/**
+﻿/*
  * This file is part of AKSupport <https://github.com/StevenJDH/AKSupport>.
- * Copyright (C) 2021 Steven Jenkins De Haro.
+ * Copyright (C) 2021-2022 Steven Jenkins De Haro.
  *
  * AKSupport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,41 +23,40 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace AKSupport.Models
+namespace AKSupport.Models;
+
+public record K8SBuildInfo
 {
-    public record K8SBuildInfo
+    private readonly string _gitVersion;
+
+    [JsonPropertyName("major")]
+    public string Major { get; init; }
+    
+    [JsonPropertyName("minor")]
+    public string Minor { get; init; }
+    
+    [JsonPropertyName("gitVersion")]
+    public string GitVersion
     {
-        private readonly string _gitVersion;
-
-        [JsonPropertyName("major")]
-        public string Major { get; init; }
-        
-        [JsonPropertyName("minor")]
-        public string Minor { get; init; }
-        
-        [JsonPropertyName("gitVersion")]
-        public string GitVersion
-        {
-            get => _gitVersion;
-            init => _gitVersion = value.Replace("v", "");
-        }
-
-        [JsonPropertyName("gitCommit")]
-        public string GitCommit { get; init; }
-        
-        [JsonPropertyName("gitTreeState")]
-        public string GitTreeState { get; init; }
-        
-        [JsonPropertyName("buildDate")]
-        public DateTime BuildDate { get; init; }
-        
-        [JsonPropertyName("goVersion")]
-        public string GoVersion { get; init; }
-        
-        [JsonPropertyName("compiler")]
-        public string Compiler { get; init; }
-        
-        [JsonPropertyName("platform")]
-        public string Platform { get; init; }
+        get => _gitVersion;
+        init => _gitVersion = value.Replace("v", "");
     }
+
+    [JsonPropertyName("gitCommit")]
+    public string GitCommit { get; init; }
+    
+    [JsonPropertyName("gitTreeState")]
+    public string GitTreeState { get; init; }
+    
+    [JsonPropertyName("buildDate")]
+    public DateTime BuildDate { get; init; }
+    
+    [JsonPropertyName("goVersion")]
+    public string GoVersion { get; init; }
+    
+    [JsonPropertyName("compiler")]
+    public string Compiler { get; init; }
+    
+    [JsonPropertyName("platform")]
+    public string Platform { get; init; }
 }
