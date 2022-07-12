@@ -34,46 +34,46 @@ public record TeamsCard
     public string Context { get; init; } = "https://schema.org/extensions";
 
     [JsonPropertyName("summary")] 
-    public string Summary { get; init; }
+    public string? Summary { get; init; }
 
     [JsonPropertyName("themeColor")] 
     public string ThemeColor { get; init; } = "0078D7";
 
     [JsonPropertyName("title")]
-    public string Title { get; init; }
+    public string? Title { get; init; }
 
     [JsonPropertyName("sections")]
-    public Section[] Sections { get; init; }
+    public Section[]? Sections { get; init; }
 
     [JsonPropertyName("potentialAction")]
-    public PotentialAction[] PotentialActions { get; init; }
+    public PotentialAction[]? PotentialActions { get; init; }
 }
 
 public record Section
 {
     [JsonPropertyName("activityTitle")]
-    public string ActivityTitle { get; init; }
+    public string? ActivityTitle { get; init; }
 
     [JsonPropertyName("activitySubtitle")]
-    public string ActivitySubtitle { get; init; }
+    public string? ActivitySubtitle { get; init; }
 
     [JsonPropertyName("activityImage")]
-    public string ActivityImage { get; init; }
+    public string? ActivityImage { get; init; }
 
     [JsonPropertyName("facts")]
-    public Fact[] Facts { get; init; }
+    public Fact[]? Facts { get; init; }
 
     [JsonPropertyName("text")]
-    public string Text { get; init; }
+    public string? Text { get; init; }
 }
 
 public record Fact
 {
     [JsonPropertyName("name")]
-    public string Name { get; init; }
+    public string? Name { get; init; }
 
     [JsonPropertyName("value")]
-    public string Value { get; init; }
+    public string? Value { get; init; }
 }
 
 public record PotentialAction
@@ -82,10 +82,10 @@ public record PotentialAction
     public string Type { get; init; } = "OpenUri";
 
     [JsonPropertyName("name")] 
-    public string Name { get; init; }
+    public string? Name { get; init; }
 
     [JsonPropertyName("targets")]
-    public Target[] Targets { get; init; }
+    public Target[]? Targets { get; init; }
 }
 
 public record Target
@@ -94,5 +94,5 @@ public record Target
     public string Os { get; init; } = "default";
 
     [JsonPropertyName("uri")]
-    public string Uri { get; init; }
+    public string? Uri { get; init; }
 }

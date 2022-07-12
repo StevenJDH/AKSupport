@@ -28,8 +28,8 @@ namespace AKSupport.Models;
 public record OAuth2Response
 {
     [JsonPropertyName("token_type")]
-    public string TokenType { get; init; }
-    
+    public string TokenType { get; init; } = null!;
+
     [JsonPropertyName("expires_in")]
     public int ExpiresIn { get; init; }
     
@@ -37,5 +37,5 @@ public record OAuth2Response
     public int ExtendedExpiresIn { get; init; }
 
     [JsonPropertyName("access_token")]
-    public string AccessToken { get; init; }
+    public string AccessToken { get; init; } = null!;
 }

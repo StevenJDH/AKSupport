@@ -28,7 +28,7 @@ namespace AKSupport.Models;
 public record Email
 {
     [JsonPropertyName("message")]
-    public Message NewMessage { get; init; }
+    public Message? NewMessage { get; init; }
 
     [JsonPropertyName("saveToSentItems")] 
     public string SaveToSentItems { get; init; } = "false";
@@ -37,32 +37,32 @@ public record Email
 public record Message
 {
     [JsonPropertyName("subject")]
-    public string Subject { get; init; }
+    public string? Subject { get; init; }
 
     [JsonPropertyName("body")]
-    public Body Body { get; init; }
+    public Body? Body { get; init; }
 
     [JsonPropertyName("toRecipients")]
-    public ToRecipient[] ToRecipients { get; init; }
+    public ToRecipient[]? ToRecipients { get; init; }
 }
 
 public record Body
 {
     [JsonPropertyName("contentType")]
-    public string ContentType { get; init; }
+    public string? ContentType { get; init; }
 
     [JsonPropertyName("content")]
-    public string Content { get; init; }
+    public string? Content { get; init; }
 }
 
 public record ToRecipient
 {
     [JsonPropertyName("emailAddress")]
-    public EmailAddress EmailAddress { get; init; }
+    public EmailAddress? EmailAddress { get; init; }
 }
 
 public record EmailAddress
 {
     [JsonPropertyName("address")]
-    public string Address { get; init; }
+    public string? Address { get; init; }
 }

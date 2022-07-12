@@ -37,7 +37,7 @@ public record MailCard
     public string Version { get; init; } = "1.0";
 
     [JsonPropertyName("body")]
-    public object[] Groups { get; init; }
+    public object[]? Groups { get; init; }
 
     [JsonPropertyName("padding")]
     public string Padding { get; init; } = "None";
@@ -49,10 +49,10 @@ public record AdaptiveColumnSet
     public string Type { get; init; } = "ColumnSet";
 
     [JsonPropertyName("columns")]
-    public AdaptiveColumn[] Columns { get; init; }
+    public AdaptiveColumn[]? Columns { get; init; }
 
     [JsonPropertyName("padding")]
-    public AdaptivePadding Padding { get; init; }
+    public AdaptivePadding? Padding { get; init; }
 
     [JsonPropertyName("style")]
     public string Style { get; init; } = "Default";
@@ -64,7 +64,7 @@ public record AdaptiveContainer
     public string Type { get; init; } = "Container";
 
     [JsonPropertyName("padding")]
-    public AdaptivePadding Padding { get; init; }
+    public AdaptivePadding? Padding { get; init; }
 
     [JsonPropertyName("style")]
     public string Style { get; init; } = "Default";
@@ -73,13 +73,13 @@ public record AdaptiveContainer
     public string Spacing { get; init; } = "None";
 
     [JsonPropertyName("items")]
-    public object[] Items { get; init; }
+    public object[]? Items { get; init; }
 
     [JsonPropertyName("separator")]
     public bool Separator { get; init; }
 
     [JsonPropertyName("horizontalAlignment")]
-    public string HorizontalAlignment { get; init; }
+    public string? HorizontalAlignment { get; init; }
 }
 
 public record AdaptiveColumn
@@ -94,7 +94,7 @@ public record AdaptiveColumn
     public string Width { get; init; } = "auto";
 
     [JsonPropertyName("items")]
-    public object[] Items { get; init; }
+    public object[]? Items { get; init; }
 
     [JsonPropertyName("verticalContentAlignment")]
     public string VerticalContentAlignment { get; init; } = "Top";
@@ -124,7 +124,7 @@ public record AdaptiveTextBlock
     public string Type { get; init; } = "TextBlock";
 
     [JsonPropertyName("text")]
-    public string Text { get; init; }
+    public string? Text { get; init; }
 
     [JsonPropertyName("wrap")]
     public bool Wrap { get; init; } = true;
@@ -148,7 +148,7 @@ public record AdaptiveImage
     public string Type { get; init; } = "Image";
 
     [JsonPropertyName("url")]
-    public string Url { get; init; }
+    public string? Url { get; init; }
 
     [JsonPropertyName("size")]
     public string Size { get; init; } = "Small";
@@ -157,22 +157,22 @@ public record AdaptiveImage
 public record AdaptiveGenericSet
 {
     [JsonPropertyName("type")]
-    public string Type { get; init; }
+    public string? Type { get; init; }
 
     [JsonPropertyName("facts")]
-    public AdaptiveFact[] Facts { get; init; }
+    public AdaptiveFact[]? Facts { get; init; }
 
     [JsonPropertyName("actions")]
-    public AdaptiveAction[] Actions { get; init; }
+    public AdaptiveAction[]? Actions { get; init; }
 }
 
 public record AdaptiveFact
 {
     [JsonPropertyName("title")]
-    public string Title { get; init; }
+    public string? Title { get; init; }
 
     [JsonPropertyName("value")]
-    public string Value { get; init; }
+    public string? Value { get; init; }
 }
 
 public record AdaptiveAction
@@ -181,13 +181,13 @@ public record AdaptiveAction
     public string Type { get; init; } = "Action.OpenUrl";
 
     [JsonPropertyName("title")]
-    public string Title { get; init; }
+    public string? Title { get; init; }
 
     [JsonPropertyName("url")]
-    public string Url { get; init; }
+    public string? Url { get; init; }
 
     [JsonPropertyName("style")]
-    public string Style { get; init; }
+    public string? Style { get; init; }
 
     [JsonPropertyName("isPrimary")]
     public bool IsPrimary { get; init; }

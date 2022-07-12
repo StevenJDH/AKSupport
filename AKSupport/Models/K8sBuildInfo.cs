@@ -27,36 +27,30 @@ namespace AKSupport.Models;
 
 public record K8SBuildInfo
 {
-    private readonly string _gitVersion;
-
     [JsonPropertyName("major")]
-    public string Major { get; init; }
-    
+    public string Major { get; init; } = null!;
+
     [JsonPropertyName("minor")]
-    public string Minor { get; init; }
-    
+    public string Minor { get; init; } = null!;
+
     [JsonPropertyName("gitVersion")]
-    public string GitVersion
-    {
-        get => _gitVersion;
-        init => _gitVersion = value.Replace("v", "");
-    }
+    public string GitVersion { get; init; } = null!;
 
     [JsonPropertyName("gitCommit")]
-    public string GitCommit { get; init; }
-    
+    public string GitCommit { get; init; } = null!;
+
     [JsonPropertyName("gitTreeState")]
-    public string GitTreeState { get; init; }
-    
+    public string GitTreeState { get; init; } = null!;
+
     [JsonPropertyName("buildDate")]
     public DateTime BuildDate { get; init; }
     
     [JsonPropertyName("goVersion")]
-    public string GoVersion { get; init; }
-    
+    public string GoVersion { get; init; } = null!;
+
     [JsonPropertyName("compiler")]
-    public string Compiler { get; init; }
-    
+    public string Compiler { get; init; } = null!;
+
     [JsonPropertyName("platform")]
-    public string Platform { get; init; }
+    public string Platform { get; init; } = null!;
 }

@@ -49,7 +49,7 @@ static class Program
             {
                 IKubeApiService kubeApi = new KubeApiService();
                 var kBuild = await kubeApi.GetBuildInfoAsync();
-                kVersion = kBuild.GitVersion;
+                kVersion = kBuild.GitVersion[1..];
             }
 
             IOAuth2Service auth2 = new OAuth2Service(Env.AppTenant, Env.AppId, Env.AppPassword);

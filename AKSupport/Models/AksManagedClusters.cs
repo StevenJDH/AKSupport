@@ -28,38 +28,38 @@ namespace AKSupport.Models;
 public record AksManagedClusters
 {
     [JsonPropertyName("id")]
-    public string Id { get; init; }
-    
+    public string Id { get; init; } = null!;
+
     [JsonPropertyName("name")]
-    public string Name { get; init; }
-    
+    public string Name { get; init; } = null!;
+
     [JsonPropertyName("type")]
-    public string Type { get; init; }
+    public string? Type { get; init; }
     
     [JsonPropertyName("properties")]
-    public OrchestratorVersionProfile VersionProfile { get; init; }
+    public OrchestratorVersionProfile? VersionProfile { get; init; }
 
     [JsonPropertyName("orchestrators")]
-    public IEnumerable<Orchestrator> Orchestrators { get; init; }
+    public IEnumerable<Orchestrator>? Orchestrators { get; init; }
 }
 
 public record OrchestratorVersionProfile
 {
     [JsonPropertyName("orchestrators")]
-    public IEnumerable<Orchestrator> Orchestrators { get; init; }
+    public IEnumerable<Orchestrator> Orchestrators { get; init; } = null!;
 }
 
 public record Orchestrator
 {
     [JsonPropertyName("orchestratorType")]
-    public string OrchestratorType { get; init; }
-    
+    public string OrchestratorType { get; init; } = null!;
+
     [JsonPropertyName("orchestratorVersion")]
-    public string OrchestratorVersion { get; init; }
-    
+    public string OrchestratorVersion { get; init; } = null!;
+
     [JsonPropertyName("upgrades")]
-    public Upgrade[] AvailableUpgrades { get; init; }
-    
+    public Upgrade[]? AvailableUpgrades { get; init; }
+
     [JsonPropertyName("default")]
     public bool? IsDefault { get; init; }
 
@@ -70,10 +70,10 @@ public record Orchestrator
 public record Upgrade
 {
     [JsonPropertyName("orchestratorType")]
-    public string OrchestratorType { get; init; }
-    
+    public string OrchestratorType { get; init; } = null!;
+
     [JsonPropertyName("orchestratorVersion")]
-    public string OrchestratorVersion { get; init; }
+    public string OrchestratorVersion { get; init; } = null!;
 
     [JsonPropertyName("isPreview")]
     public bool? IsPreview { get; init; }
