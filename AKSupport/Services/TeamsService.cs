@@ -29,10 +29,9 @@ namespace AKSupport.Services;
 
 sealed class TeamsService : INotificationService
 {
-    private readonly TimeSpan _timeoutSeconds;
-    private HttpClient _httpClient;
     private readonly string _channelWebhook;
     private readonly string _imageUrl;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Constructs a new <see cref="TeamsService"/> instance to interact with the Teams service.
@@ -42,12 +41,12 @@ sealed class TeamsService : INotificationService
     /// <param name="timeoutSeconds">
     /// Number of seconds to wait before a request times out. Default is 90 seconds.
     /// </param>
-    public TeamsService(string channelWebhook, string imageUrl, int timeoutSeconds = 90)
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public TeamsService(string? channelWebhook, string? imageUrl, int timeoutSeconds = 90)
     {
-        _channelWebhook = channelWebhook;
-        _imageUrl = imageUrl;
-        _timeoutSeconds = TimeSpan.FromSeconds(timeoutSeconds);
-        CreateHttpClient();
+        _channelWebhook = channelWebhook ?? throw new ArgumentNullException(nameof(channelWebhook));
+        _imageUrl = imageUrl ?? throw new ArgumentNullException(nameof(imageUrl));
+        _httpClient = CreateHttpClient(TimeSpan.FromSeconds(timeoutSeconds));
     }
 
     /// <summary>
@@ -62,9 +61,13 @@ sealed class TeamsService : INotificationService
     /// <param name="clusterUrl">Optional Azure Portal URL for <paramref name="clusterName"/>.</param>
     /// <returns><see langword="true"/> if notification was successful, <see langword="false"/> if not.</returns>
     /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-    public async Task<bool> SendNotificationAsync(string clusterName, string version, string description, 
-        string status, string clusterUrl)
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public async Task<bool> SendNotificationAsync(string? clusterName, string version, string description, 
+        string status, string? clusterUrl)
     {
+        ArgumentNullException.ThrowIfNull(clusterName);
+        ArgumentNullException.ThrowIfNull(clusterUrl);
+
         var card = GetCardTemplate(clusterName, version, description, status, clusterUrl);
         var jsonCard = new StringContent(JsonSerializer.Serialize(card), Encoding.UTF8, "application/json");
         using var response = await _httpClient.PostAsync(_channelWebhook, jsonCard);
@@ -142,11 +145,13 @@ sealed class TeamsService : INotificationService
     /// Creates a new instance of <see cref="HttpClient"/> with configuration needed to interact
     /// with the Teams service.
     /// </summary>
-    private void CreateHttpClient() => _httpClient = new HttpClient { Timeout = _timeoutSeconds };
+    /// <param name="timeoutSeconds">Number of seconds to wait before a request times out.</param>
+    /// <returns>New HttpClient instance.</returns>
+    private static HttpClient CreateHttpClient(TimeSpan timeoutSeconds) => new() { Timeout = timeoutSeconds };
 
     /// <summary>
     /// Releases any unmanaged resources and disposes of the managed resources used
     /// by the <see cref="TeamsService"/>.
     /// </summary>
-    public void Dispose() => _httpClient?.Dispose();
+    public void Dispose() => _httpClient.Dispose();
 }

@@ -39,11 +39,12 @@ sealed class OAuth2Service : IOAuth2Service
     /// <param name="tenant">Tenant of <paramref name="appId"/>.</param>
     /// <param name="appId">App Id (Client Id) of the Service Principal.</param>
     /// <param name="password">Password (Client Secret) of <paramref name="appId"/>.</param>
-    public OAuth2Service(string tenant, string appId, string password)
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public OAuth2Service(string? tenant, string? appId, string? password)
     {
-        _tenant = tenant;
-        _appId = appId;
-        _password = password;
+        _tenant = tenant ?? throw new ArgumentNullException(nameof(tenant));
+        _appId = appId ?? throw new ArgumentNullException(nameof(appId));
+        _password = password ?? throw new ArgumentNullException(nameof(password));
     }
 
     /// <summary>

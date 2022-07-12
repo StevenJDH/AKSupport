@@ -23,6 +23,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AKSupport.Models;
 
@@ -34,8 +35,7 @@ sealed class OfficeMailService : INotificationService
     private readonly string _recipient;
     private readonly string _imageUrl;
     private readonly IOAuth2Service _oAuth2;
-    private readonly TimeSpan _timeoutSeconds;
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Constructs a new <see cref="OfficeMailService"/> instance to interact with the Office Mail service.
@@ -47,15 +47,15 @@ sealed class OfficeMailService : INotificationService
     /// <param name="timeoutSeconds">
     /// Number of seconds to wait before a request times out. Default is 90 seconds.
     /// </param>
-    public OfficeMailService(string senderId, string recipient, string imageUrl, IOAuth2Service oAuth2, 
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public OfficeMailService(string? senderId, string? recipient, string? imageUrl, IOAuth2Service oAuth2, 
         int timeoutSeconds = 90)
     {
-        _senderId = senderId;
-        _recipient = recipient;
-        _imageUrl = imageUrl;
+        _senderId = senderId ?? throw new ArgumentNullException(nameof(senderId));
+        _recipient = recipient ?? throw new ArgumentNullException(nameof(recipient));
+        _imageUrl = imageUrl ?? throw new ArgumentNullException(nameof(imageUrl));
         _oAuth2 = oAuth2;
-        _timeoutSeconds = TimeSpan.FromSeconds(timeoutSeconds);
-        CreateHttpClient();
+        _httpClient = CreateHttpClient(TimeSpan.FromSeconds(timeoutSeconds));
     }
 
     /// <summary>
@@ -71,9 +71,13 @@ sealed class OfficeMailService : INotificationService
     /// <param name="clusterUrl">Optional Azure Portal URL for <paramref name="clusterName"/>.</param>
     /// <returns><see langword="true"/> if notification was successful, <see langword="false"/> if not.</returns>
     /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-    public async Task<bool> SendNotificationAsync(string clusterName, string version, string description, 
-        string status, string clusterUrl)
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public async Task<bool> SendNotificationAsync(string? clusterName, string version, string description, 
+        string status, string? clusterUrl)
     {
+        ArgumentNullException.ThrowIfNull(clusterName);
+        ArgumentNullException.ThrowIfNull(clusterUrl);
+        
         var url = $"https://graph.microsoft.com/v1.0/users/{_senderId}/sendMail";
         var emailAddress = new EmailAddress { Address = _recipient };
         
@@ -221,7 +225,10 @@ sealed class OfficeMailService : INotificationService
 
         sb.Append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         sb.Append("<script type=\"application/adaptivecard+json\">");
-        sb.Append(JsonSerializer.Serialize(card, new JsonSerializerOptions { IgnoreNullValues = true }));
+        sb.Append(JsonSerializer.Serialize(card, new JsonSerializerOptions 
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull 
+        }));
         sb.Append("</script> </head><body></body></html>");
 
         return sb.ToString();
@@ -231,11 +238,13 @@ sealed class OfficeMailService : INotificationService
     /// Creates a new instance of <see cref="HttpClient"/> with configuration needed to interact
     /// with the Office Mail service.
     /// </summary>
-    private void CreateHttpClient() => _httpClient = new HttpClient { Timeout = _timeoutSeconds };
+    /// <param name="timeoutSeconds">Number of seconds to wait before a request times out.</param>
+    /// <returns>New HttpClient instance.</returns>
+    private static HttpClient CreateHttpClient(TimeSpan timeoutSeconds) => new() { Timeout = timeoutSeconds };
 
     /// <summary>
     /// Releases any unmanaged resources and disposes of the managed resources used
     /// by the <see cref="OfficeMailService"/>.
     /// </summary>
-    public void Dispose() => _httpClient?.Dispose();
+    public void Dispose() => _httpClient.Dispose();
 }

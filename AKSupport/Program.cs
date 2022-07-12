@@ -30,13 +30,12 @@ namespace AKSupport;
 static class Program
 {
     private static readonly EnvironmentConfig Env = LoadConfiguration();
-    private static IEnumerable<INotificationService> _services;
+    private static readonly IEnumerable<INotificationService> _services = RegisterNotificationServices();
 
     static async Task<int> Main(string[] args)
     {
         Console.WriteLine(GetLogo());
         Console.WriteLine("{0,-36:o} Checking AKS support status...", DateTimeOffset.UtcNow);
-        RegisterNotificationServices();
         
         string kVersion;
 
@@ -175,9 +174,10 @@ static class Program
     }
 
     /// <summary>
-    /// Registers the different notification services with the service container.
+    /// Builds a list of notification services that can be registered with the service container.
     /// </summary>
-    private static void RegisterNotificationServices()
+    /// <returns>List of registered notification services.</returns>
+    private static IEnumerable<INotificationService> RegisterNotificationServices()
     {
         var services = new List<INotificationService>();
 
@@ -194,7 +194,7 @@ static class Program
                 new OAuth2Service(Env.MailAppTenant, Env.MailAppId, Env.MailAppPassword)));
         }
 
-        _services = services;
+        return services;
     }
 
     /// <summary>

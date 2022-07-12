@@ -32,8 +32,7 @@ sealed class ContainerService : IContainerService
 {
     private readonly string _subscriptionId;
     private readonly IOAuth2Service _oAuth2;
-    private readonly TimeSpan _timeoutSeconds;
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Constructs a new <see cref="ContainerService"/> instance to interact with the AKS API.
@@ -43,12 +42,12 @@ sealed class ContainerService : IContainerService
     /// <param name="timeoutSeconds">
     /// Number of seconds to wait before a request times out. Default is 90 seconds.
     /// </param>
-    public ContainerService(string subscriptionId, IOAuth2Service oAuth2, int timeoutSeconds = 90)
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public ContainerService(string? subscriptionId, IOAuth2Service oAuth2, int timeoutSeconds = 90)
     {
-        _subscriptionId = subscriptionId;
+        _subscriptionId = subscriptionId ?? throw new ArgumentNullException(nameof(subscriptionId));
         _oAuth2 = oAuth2;
-        _timeoutSeconds = TimeSpan.FromSeconds(timeoutSeconds);
-        CreateHttpClient();
+        _httpClient = CreateHttpClient(TimeSpan.FromSeconds(timeoutSeconds));
     }
 
     /// <summary>
@@ -59,8 +58,11 @@ sealed class ContainerService : IContainerService
     /// <param name="location">AKS region to use when checking for supported versions.</param>
     /// <returns>A listed of supported versions and their upgrade paths.</returns>
     /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-    public async Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location)
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    public async Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string? location)
     {
+        ArgumentNullException.ThrowIfNull(location);
+        
         string token = await _oAuth2.GetAuthorizeTokenAsync(_httpClient, "https://management.azure.com/.default")
             .ConfigureAwait(false);
 
@@ -83,11 +85,13 @@ sealed class ContainerService : IContainerService
     /// Creates a new instance of <see cref="HttpClient"/> with configuration needed to interact
     /// with the AKS API.
     /// </summary>
-    private void CreateHttpClient() => _httpClient = new HttpClient { Timeout = _timeoutSeconds };
+    /// <param name="timeoutSeconds">Number of seconds to wait before a request times out.</param>
+    /// <returns>New HttpClient instance.</returns>
+    private static HttpClient CreateHttpClient(TimeSpan timeoutSeconds) => new() { Timeout = timeoutSeconds };
 
     /// <summary>
     /// Releases any unmanaged resources and disposes of the managed resources used
     /// by the <see cref="ContainerService"/>.
     /// </summary>
-    public void Dispose() => _httpClient?.Dispose();
+    public void Dispose() => _httpClient.Dispose();
 }

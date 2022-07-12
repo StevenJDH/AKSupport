@@ -36,5 +36,6 @@ interface IContainerService : IDisposable
     /// <param name="location">AKS region to use when checking for supported versions.</param>
     /// <returns>A listed of supported versions and their upgrade paths.</returns>
     /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-    Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string location);
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    Task<IEnumerable<Orchestrator>> GetSupportedVersionsAsync(string? location);
 }

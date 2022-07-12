@@ -24,20 +24,20 @@ using System.Threading.Tasks;
 
 namespace AKSupport.Models;
 
-record EnvironmentConfig
+public record EnvironmentConfig
 {
-    public string SubscriptionId { get; init; }
-    public string AppTenant { get; init; }
-    public string AppId { get; init; }
-    public string AppPassword { get; init; }
-    public string AksRegion { get; init; }
-    public string ImageUrl { get; init; }
-    public string AksClusterName { get; init; }
-    public string AksClusterUrl { get; init; }
-    public string ChannelWebhookUrl  { get; init; }
-    public string MailAppTenant { get; init; }
-    public string MailAppId { get; init; }
-    public string MailAppPassword { get; init; }
-    public string SenderId { get; init; }
-    public string RecipientAddress { get; init; }
+    public string? SubscriptionId { get; init; }
+    public string? AppTenant { get; init; }
+    public string? AppId { get; init; }
+    public string? AppPassword { get; init; }
+    public string? AksRegion { get; init; }
+    public string? ImageUrl { get; init; }
+    public string? AksClusterName { get; init; }
+    public string? AksClusterUrl { get; init; }
+    public string? ChannelWebhookUrl  { get; init; }
+    public string? MailAppTenant { get; init; }
+    public string? MailAppId { get; init; }
+    public string? MailAppPassword { get; init; }
+    public string? SenderId { get; init; }
+    public string? RecipientAddress { get; init; }
 }

@@ -33,8 +33,7 @@ namespace AKSupport.Services;
 
 sealed class KubeApiService : IKubeApiService
 {
-    private readonly TimeSpan _timeoutSeconds;
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
 
     /// <summary>
     /// Constructs a new <see cref="KubeApiService"/> instance to interact with the kube-apiserver.
@@ -44,8 +43,7 @@ sealed class KubeApiService : IKubeApiService
     /// </param>
     public KubeApiService(int timeoutSeconds = 90)
     {
-        _timeoutSeconds = TimeSpan.FromSeconds(timeoutSeconds);
-        CreateHttpClient();
+        _httpClient = CreateHttpClient(TimeSpan.FromSeconds(timeoutSeconds));
     }
 
     /// <summary>
@@ -60,14 +58,17 @@ sealed class KubeApiService : IKubeApiService
 
         response.EnsureSuccessStatusCode();
 
-        return JsonSerializer.Deserialize<K8SBuildInfo>(await response.Content.ReadAsStringAsync());
+        return JsonSerializer.Deserialize<K8SBuildInfo>(await response.Content.ReadAsStringAsync()) ?? 
+            throw new HttpRequestException("Found invalid response content when processing Kubernetes build info.");
     }
 
     /// <summary>
     /// Creates a new instance of <see cref="HttpClient"/> with configuration needed to interact
     /// with the kube-apiserver.
     /// </summary>
-    private void CreateHttpClient()
+    /// <param name="timeoutSeconds">Number of seconds to wait before a request times out.</param>
+    /// <returns>New HttpClient instance configured for Kubernetes.</returns>
+    private static HttpClient CreateHttpClient(TimeSpan timeoutSeconds)
     {
         string workingDir = Path.Join("..", "var", "run", "secrets", "kubernetes.io", "serviceaccount");
         string caPath = Path.Join(workingDir, "ca.crt");
@@ -80,24 +81,24 @@ sealed class KubeApiService : IKubeApiService
             CheckCertificateRevocationList = false,
             // This is required to use the Pod's self-signed certificate.
             ServerCertificateCustomValidationCallback = 
-                (httpRequestMessage, cert, cetChain, policyErrors) => true
+                (httpRequestMessage, cert, cetChain, policyErrors) => true,
+            ClientCertificates = { new X509Certificate2(caPath, authToken) }
         };
 
-        httpClientHandler.ClientCertificates.Add(new X509Certificate2(caPath));
-
-        _httpClient = new HttpClient(httpClientHandler, disposeHandler: true)
+        return new HttpClient(httpClientHandler, disposeHandler: true)
         {
-            Timeout = _timeoutSeconds,
-            BaseAddress = new Uri("https://kubernetes.default.svc")
+            Timeout = timeoutSeconds,
+            BaseAddress = new Uri("https://kubernetes.default.svc"),
+            DefaultRequestHeaders =
+            {
+                Authorization = new AuthenticationHeaderValue("Bearer", authToken)
+            }
         };
-
-        _httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", authToken);
     }
 
     /// <summary>
     /// Releases any unmanaged resources and disposes of the managed resources used
     /// by the <see cref="KubeApiService"/>.
     /// </summary>
-    public void Dispose() => _httpClient?.Dispose();
+    public void Dispose() => _httpClient.Dispose();
 }

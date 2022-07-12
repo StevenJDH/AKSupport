@@ -40,6 +40,7 @@ interface INotificationService : IDisposable
     /// <param name="clusterUrl">Optional Azure Portal URL for <paramref name="clusterName"/>.</param>
     /// <returns><see langword="true"/> if notification was successful, <see langword="false"/> if not.</returns>
     /// <exception cref="HttpRequestException">The HTTP response is unsuccessful.</exception>
-    Task<bool> SendNotificationAsync(string clusterName, string version, string description, string status, 
-        string clusterUrl);
+    /// <exception cref="ArgumentNullException">The specified argument passed is null.</exception>
+    Task<bool> SendNotificationAsync(string? clusterName, string version, string description, string status, 
+        string? clusterUrl);
 }
