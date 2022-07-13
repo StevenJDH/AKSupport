@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -95,7 +96,7 @@ sealed class OfficeMailService : INotificationService
             }
         };
         
-        var jsonMail = new StringContent(JsonSerializer.Serialize(email), Encoding.UTF8, "application/json");
+        var jsonMail = new StringContent(JsonSerializer.Serialize(email), Encoding.UTF8, MediaTypeNames.Application.Json);
         string token = await _oAuth2.GetAuthorizeTokenAsync(_httpClient, "https://graph.microsoft.com/.default")
             .ConfigureAwait(false);
 

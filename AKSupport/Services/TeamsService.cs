@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -69,7 +70,7 @@ sealed class TeamsService : INotificationService
         ArgumentNullException.ThrowIfNull(clusterUrl);
 
         var card = GetCardTemplate(clusterName, version, description, status, clusterUrl);
-        var jsonCard = new StringContent(JsonSerializer.Serialize(card), Encoding.UTF8, "application/json");
+        var jsonCard = new StringContent(JsonSerializer.Serialize(card), Encoding.UTF8, MediaTypeNames.Application.Json);
         using var response = await _httpClient.PostAsync(_channelWebhook, jsonCard);
 
         response.EnsureSuccessStatusCode();
