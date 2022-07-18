@@ -20,9 +20,6 @@ on:
     - '*.png'
     types: [opened, synchronize, reopened] # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#pull_request
 
-env:
-  IMAGE_NAME: AKSupport
-
 jobs:
   build:
     name: Build
@@ -48,7 +45,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         dotnet tool install --global dotnet-sonarscanner
-        dotnet sonarscanner begin /k:StevenJDH_${{ env.IMAGE_NAME }} /o:stevenjdh /d:sonar.login=$SONAR_TOKEN \
+        dotnet sonarscanner begin /k:StevenJDH_AKSupport /o:stevenjdh /d:sonar.login=$SONAR_TOKEN \
             /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="**/*.*"
         dotnet build --configuration Release --no-restore
         dotnet test --no-build --verbosity normal
@@ -72,10 +69,13 @@ jobs:
           !*/Properties/
           !*.md
         retention-days: 1
-  
+
   push_to_registries:
     name: Deploy Containers
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     environment: prod
     if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/')
     needs: build
@@ -86,64 +86,54 @@ jobs:
       with:
         name: repo-src
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+    - name: Generate Docker Metadata
+      id: meta
+      uses: docker/metadata-action@v4
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-3
+        # List of container registry names to use for image tagging.
+        # Everything will be automatically set to lowercase.
+        images: |
+          public.ecr.aws/${{ github.repository }},enable=true
+          docker.io/${{ github.repository }},enable=true
+          ghcr.io/${{ github.repository }},enable=true
+        # Generates Docker tags based on the following events/attributes.
+        tags: |
+          type=ref,event=branch,enable=false
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=sha
+          type=raw,value=latest,enable={{is_default_branch}}
 
-    - name: Login to Amazon Public ECR
-      id: login-public-ecr
-      run: |
-        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/${{ github.repository_owner }}
-        echo "::set-output name=registry::public.ecr.aws/${{ github.repository_owner }}"
+    - name: Login to AWS Public ECR
+      uses: docker/login-action@v2
+      with:
+        registry: public.ecr.aws
+        username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      env:
+        # Must be us-east-1 for requesting authentication token.
+        # Reference: https://docs.aws.amazon.com/AmazonECR/latest/public/getting-started-cli.html#cli-authenticate-registry
+        AWS_REGION: us-east-1
 
-    - name: Login to GitHub Registry
-      # Using CR_PAT because secrets.GITHUB_TOKEN gives 403 error when pushing more than one tag.
-      run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Login to GHCR
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build, Tag, and Push Image
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-public-ecr.outputs.registry }}
-      run: |
-        AECR_IMAGE_ID=$ECR_REGISTRY/$IMAGE_NAME
-        GHCR_IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-
-        # Change all uppercase to lowercase
-        AECR_IMAGE_ID=$(echo $AECR_IMAGE_ID | tr '[A-Z]' '[a-z]')
-        GHCR_IMAGE_ID=$(echo $GHCR_IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-        # Strip git ref prefix from branch name or version tag. Ensure workflow is only triggered on version tags.
-        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-        # Strip "v" prefix from tag name if present.
-        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-        LATEST=latest
-
-        # Display results of the variable conversion process.
-        echo AECR_IMAGE_ID=$AECR_IMAGE_ID
-        echo GHCR_IMAGE_ID=$GHCR_IMAGE_ID
-        echo VERSION=$VERSION
-
-        # Build the docker container and tag with :version and :latest for ECR and GitHub Registry.
-        docker build --file */Dockerfile -t $AECR_IMAGE_ID:$VERSION -t $AECR_IMAGE_ID:$LATEST . \
-            --label "org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/$IMAGE_NAME"
-        docker tag $AECR_IMAGE_ID $GHCR_IMAGE_ID:$VERSION
-        docker tag $GHCR_IMAGE_ID:$VERSION $GHCR_IMAGE_ID:$LATEST
-
-        # Push all tags to ECR and GitHub Registry.
-        docker push $AECR_IMAGE_ID --all-tags
-        docker push $GHCR_IMAGE_ID --all-tags
-
-        # Set output for all image ids.
-        echo "::set-output name=ecr_image_version::$AECR_IMAGE_ID:$VERSION"
-        echo "::set-output name=ecr_image_latest::$AECR_IMAGE_ID:$LATEST"
-        echo "::set-output name=ghcr_image_version::$GHCR_IMAGE_ID:$VERSION"
-        echo "::set-output name=ghcr_image_latest::$GHCR_IMAGE_ID:$LATEST"
-
-    - name: Logout of GitHub Registry
-      run:  docker logout ghcr.io
-
-    - name: Logout of Amazon Public ECR
-      run: docker logout public.ecr.aws
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: AKSupport/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
