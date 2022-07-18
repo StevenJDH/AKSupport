@@ -247,7 +247,13 @@ Included is a POC created using Terraform for Infrastructure as Code (IaC) to qu
 The `prep_for_azure_monitor_alert` variable controls whether extra resources are created for the Azure Monitor integration like Container Insights. If they are not, then set that variable to `false` and remove the `mail_recipient_address` variable unless the Office Mail configuration is being used. The `variables.tf` file contains all variables needed for additional configurations. For testing with specific version like in the [Testing](#testing) section, add `-var version_test=[\"1.17.0\"]` with escaped quotes if using Windows, or `-var version_test=["1.17.0"]` if not, to the `terraform plan` and `terraform destroy` steps.
 
 ## Container registries
-AKSupport container images are hosted on the [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport) and the [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport). For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
+AKSupport container images are currently hosted on the following platforms:
+
+* [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport)
+* [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport)
+* [Docker Hub](https://hub.docker.com/repository/docker/stevenjdh/aksupport)
+
+For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
 
 ## Disclaimer
 AKSupport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
