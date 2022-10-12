@@ -35,6 +35,7 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 * An Azure [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) for API access.
 * An Office 365 tenant with Service Principal for Mail and Teams features.
 * A [supported Office 365 version or Outlook client](https://docs.microsoft.com/en-us/outlook/actionable-messages/#outlook-version-requirements-for-actionable-messages) for actionable message cards.
+* [Helm v3](https://github.com/helm/helm/releases) installed to optionally deploy with the [AKSupport Helm Chart](https://github.com/StevenJDH/helm-charts/tree/main/charts/aksupport).
 * [Terraform](https://www.terraform.io/downloads.html) 1.30.x or above for POC only.
 
 ## Usage
@@ -216,6 +217,9 @@ kubectl logs <aksupport-cronjob-00-00>
 ```
 
 In the logs, there will be additional information for the result of the check or any errors that occurred.
+
+## Helm chart
+AKSupport can be optionally deployed to a Kubernetes cluster using the [AKSupport Helm Chart](https://github.com/StevenJDH/helm-charts/tree/main/charts/aksupport) that is managed in a separate repository.
 
 ## Terraform
 Included is a POC created using Terraform for Infrastructure as Code (IaC) to quickly create a working test environment. The POC includes an AKS instance, Container Insights, an Action Group for email alerts, and all the Kubernetes resources, but the Azure Monitor [Log alert rule](#azure-monitor-integration) will have to be created manually if needed as this is [not yet supported](https://github.com/terraform-providers/terraform-provider-azurerm/issues/4395). To create the POC, perform the following steps:
