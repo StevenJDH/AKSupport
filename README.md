@@ -35,7 +35,7 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 * An Azure [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) for API access.
 * An Office 365 tenant with Service Principal for Mail and Teams features.
 * A [supported Office 365 version or Outlook client](https://docs.microsoft.com/en-us/outlook/actionable-messages/#outlook-version-requirements-for-actionable-messages) for actionable message cards.
-* [Terraform](https://www.terraform.io/downloads.html) 0.15.x for POC only.
+* [Terraform](https://www.terraform.io/downloads.html) 1.30.x or above for POC only.
 
 ## Usage
 The following are the steps needed to set up AKSupport correctly along with the needed API permissions:
@@ -229,7 +229,7 @@ Included is a POC created using Terraform for Infrastructure as Code (IaC) to qu
 2. Create a new plan with only Azure Monitor integration:
 
    ```bash
-   terraform plan -var subscription_id=xxx -var app_tenant_id=xxx -var app_id=xxx -var app_password=xxx -var prep_for_azure_monitor_alert=true -var mail_recipient_address=xxx -out aksupport.tfplan
+   terraform plan -var app_tenant_id=xxx -var app_id=xxx -var app_password=xxx -var mail_recipient_address=xxx -out aksupport.tfplan
    ```
 
 3. Create the resources based on the plan:
@@ -241,10 +241,10 @@ Included is a POC created using Terraform for Infrastructure as Code (IaC) to qu
 4. Explore the POC, and when done, delete it using the same variables as before:
 
    ```bash
-   terraform destroy -var subscription_id=xxx -var app_tenant_id=xxx -var app_id=xxx -var app_password=xxx -var prep_for_azure_monitor_alert=true -var mail_recipient_address=xxx
+   terraform destroy -var app_tenant_id=xxx -var app_id=xxx -var app_password=xxx -var mail_recipient_address=xxx
    ```
 
-The `prep_for_azure_monitor_alert` variable controls whether extra resources are created for the Azure Monitor integration like Container Insights. If they are not, then set that variable to `false` and remove the `mail_recipient_address` variable unless the Office Mail configuration is being used. The `variables.tf` file contains all variables needed for additional configurations. For testing with specific version like in the [Testing](#testing) section, add `-var version_test=[\"1.17.0\"]` with escaped quotes if using Windows, or `-var version_test=["1.17.0"]` if not, to the `terraform plan` and `terraform destroy` steps.
+The `mail_recipient_address` variable controls whether an action group is created for the Azure Monitor integration, like Container Insights. If this is not needed, and the Office Mail configuration is not being used, then remove the `mail_recipient_address` variable from the commands above. The `variables.tf` file contains additional variables needed to enable other supported features. For example, to test with a specific version like in the [Testing](#testing) section, add `-var version_test=1.17.0` to the `terraform plan` and `terraform destroy` steps.
 
 ## Container registries
 AKSupport container images are currently hosted on the following platforms:

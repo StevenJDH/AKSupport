@@ -1,6 +1,6 @@
-/**
+/*
  * This file is part of AKSupport <https://github.com/StevenJDH/AKSupport>.
- * Copyright (C) 2021 Steven Jenkins De Haro.
+ * Copyright (C) 2021-2022 Steven Jenkins De Haro.
  *
  * AKSupport is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,16 @@
  */
 
 provider "azurerm" {
-  subscription_id = var.subscription_id
-  tenant_id       = var.app_tenant_id
-
   features {}
 }
 
-provider "kubernetes" {
-  host                   = azurerm_kubernetes_cluster.k8s.kube_config[0].host
-  load_config_file       = false
+provider "random" {}
 
-  client_certificate     = base64decode(azurerm_kubernetes_cluster.k8s.kube_config[0].client_certificate)
-  client_key             = base64decode(azurerm_kubernetes_cluster.k8s.kube_config[0].client_key)
-  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.k8s.kube_config[0].cluster_ca_certificate)
+provider "helm" {
+  kubernetes {
+    host                   = module.aks.host
+    cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+    client_certificate     = base64decode(module.aks.client_certificate)
+    client_key             = base64decode(module.aks.client_key)
+  }
 }

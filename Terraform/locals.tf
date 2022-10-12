@@ -16,29 +16,22 @@
  * along with AKSupport.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-output "client_certificate" {
-  value     = module.aks.client_certificate
-  sensitive = true
-}
+locals {
+  stage               = "poc"
+  resource_group_name = "rg-aksupport-${local.stage}"
 
-output "kube_config" {
-  value     = module.aks.kube_config
-  sensitive = true
-}
+  network_profile = {
+    network_plugin = "kubenet"
+    network_policy = "calico"
+  }
 
-output "fqdn" {
-  value = module.aks.fqdn
-}
+  default_pool = {
+    name    = "default"
+    vm_size = "Standard_D2_v2"
+  }
 
-output "host" {
-  value     = module.aks.host
-  sensitive = true
-}
-
-output "action_group_id" {
-  value = try(azurerm_monitor_action_group.aksupport[0].id, null)
-}
-
-output "kubeconfig_cmd" {
-  value = module.aks.kubeconfig_cmd
+  tags = {
+    environment = local.stage
+    terraform   = true
+  }
 }
