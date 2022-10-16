@@ -80,8 +80,7 @@ sealed class KubeApiService : IKubeApiService
             SslProtocols = SslProtocols.Tls12,
             CheckCertificateRevocationList = false,
             // This is required to use the Pod's self-signed certificate.
-            ServerCertificateCustomValidationCallback = 
-                (httpRequestMessage, cert, cetChain, policyErrors) => true,
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
             ClientCertificates = { new X509Certificate2(caPath, authToken) }
         };
 
