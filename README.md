@@ -38,28 +38,40 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 * [Helm v3](https://github.com/helm/helm/releases) installed to optionally deploy with the [AKSupport Helm Chart](https://github.com/StevenJDH/helm-charts/tree/main/charts/aksupport).
 * [Terraform](https://www.terraform.io/downloads.html) 1.30.x or above for POC only.
 
-## Usage
-The following are the steps needed to set up AKSupport correctly along with the needed API permissions:
+## Container registries
+AKSupport container images are currently hosted on the following platforms:
 
-1. In a console window, type `az ad sp create-for-rbac -n "AKSupport"` to create a [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) in Azure. Currently, this assigns `Contributor` rights to the SP, but in the future, this will change. Use `--skip-assignment` to skip the role assignment if a more specific role is needed, and then follow the [Steps to assign an Azure role](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps) article. The output from the command should look like the following:
+* [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport)
+* [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport)
+* [Docker Hub](https://hub.docker.com/repository/docker/stevenjdh/aksupport)
 
-   ```json
-   {
-     "appId": "...",
-     "displayName": "AKSupport",
-     "name": "http://AKSupport",
-     "password": "...",
-     "tenant": "..."
-   }
-   ```
+For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
 
-2. Create a Kubernetes Secret in AKS for the SP `password` by typing:
+## App registration
+Before deploying AKSupport, create an app registration along with the needed API permissions. To do this, open a console window, and type `az ad sp create-for-rbac -n "AKSupport" --role contributor` to create a [Service Principal](https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az_ad_sp_create_for_rbac) in Azure. Use `--skip-assignment` to skip the role assignment if a more specific role and or scope is needed, and then follow the [Steps to assign an Azure role](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps) article. The output from the command should look similar to the following:
+
+```json
+{
+   "appId": "...",
+   "displayName": "AKSupport",
+   "password": "...",
+   "tenant": "..."
+}
+```
+
+## Helm chart
+AKSupport can be optionally deployed to an AKS cluster using the [AKSupport Helm Chart](https://github.com/StevenJDH/helm-charts/tree/main/charts/aksupport) that is managed in a separate repository. All of the features described below are supported by this chart and the [Terraform POC](#terraform).
+
+## Manual setup
+The following are the steps needed to set up AKSupport manually in AKS:
+
+1. Create a Kubernetes Secret in AKS for the SP `password` by typing:
 
    ```bash
    kubectl create secret generic aksupport-secret --from-literal=AZURE_APP_PASSWORD=<password>
    ```
 
-3. Create a Kubernetes ConfigMap in AKS for the SP appId and tenant fields along with the AKS subscription ID and region by typing:
+2. Create a Kubernetes ConfigMap in AKS for the SP appId and tenant fields along with the AKS subscription ID and region by typing:
 
    ```bash
    kubectl create configmap aksupport-config --from-literal=AZURE_SUBSCRIPTION_ID=<subscriptionId> \
@@ -68,13 +80,13 @@ The following are the steps needed to set up AKSupport correctly along with the 
        --from-literal=AZURE_AKS_REGION=<region>
    ```
 
-4. Create a Kubernetes CronJob in AKS for AKSupport by using the following command and provided definition:
+3. Create a Kubernetes CronJob in AKS for AKSupport by using the following command and provided definition:
 
    ```bash
    kubectl create -f https://raw.githubusercontent.com/StevenJDH/AKSupport/main/YAML/aksupport-cronjob.yaml
    ```
 
-5. Assuming everything was set up correctly, AKSupport will run at the default configured time via the CronJob at 8:00am every morning. You will also need to [configure at least one](#configuring-notifications) notification method to receive notifications. To confirm the creation of the AKSupport CronJob, type:
+4. Assuming everything was set up correctly, AKSupport will run at the default configured time via the CronJob at 8:00am every morning. You will also need to [configure at least one](#configuring-notifications) notification method to receive notifications. To confirm the creation of the AKSupport CronJob, type:
 
    ```bash
    kubectl get cronjobs
@@ -218,9 +230,6 @@ kubectl logs <aksupport-cronjob-00-00>
 
 In the logs, there will be additional information for the result of the check or any errors that occurred.
 
-## Helm chart
-AKSupport can be optionally deployed to a Kubernetes cluster using the [AKSupport Helm Chart](https://github.com/StevenJDH/helm-charts/tree/main/charts/aksupport) that is managed in a separate repository.
-
 ## Terraform
 Included is a POC created using Terraform for Infrastructure as Code (IaC) to quickly create a working test environment. The POC includes an AKS instance, Container Insights, an Action Group for email alerts, and all the Kubernetes resources, but the Azure Monitor [Log alert rule](#azure-monitor-integration) will have to be created manually if needed as this is [not yet supported](https://github.com/terraform-providers/terraform-provider-azurerm/issues/4395). To create the POC, perform the following steps:
 
@@ -249,15 +258,6 @@ Included is a POC created using Terraform for Infrastructure as Code (IaC) to qu
    ```
 
 The `mail_recipient_address` variable controls whether an action group is created for the Azure Monitor integration, like Container Insights. If this is not needed, and the Office Mail configuration is not being used, then remove the `mail_recipient_address` variable from the commands above. The `variables.tf` file contains additional variables needed to enable other supported features. For example, to test with a specific version like in the [Testing](#testing) section, add `-var version_test=1.17.0` to the `terraform plan` and `terraform destroy` steps.
-
-## Container registries
-AKSupport container images are currently hosted on the following platforms:
-
-* [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport)
-* [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport)
-* [Docker Hub](https://hub.docker.com/repository/docker/stevenjdh/aksupport)
-
-For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
 
 ## Disclaimer
 AKSupport is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
