@@ -43,7 +43,7 @@ AKSupport container images are currently hosted on the following platforms:
 
 * [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport)
 * [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport)
-* [Docker Hub](https://hub.docker.com/repository/docker/stevenjdh/aksupport)
+* [Docker Hub](https://hub.docker.com/r/stevenjdh/aksupport)
 
 For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
 
