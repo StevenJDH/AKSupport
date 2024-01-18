@@ -217,6 +217,6 @@ static class Program
                                         | ##      | ##       Steven Jenkins De Haro v{v!.Major}.{v.Minor}.{v.Build}
                                         | ##      | ##
                                         |__/      |__/
-                    "[2..]; // Removes the initial newline with substring range index.
+                    "[1..]; // Removes the initial newline with substring range index.
     }
 }
