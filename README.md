@@ -11,7 +11,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=security_rating)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=StevenJDH_AKSupport&metric=ncloc)](https://sonarcloud.io/dashboard?id=StevenJDH_AKSupport)
-![Maintenance](https://img.shields.io/maintenance/yes/2022)
+![Maintenance](https://img.shields.io/maintenance/yes/2024)
 ![GitHub](https://img.shields.io/github/license/StevenJDH/AKSupport)
 
 AKSupport is an automation tool that regularly checks for the current supported status of an AKS cluster to alert those interested that an upgrade is needed to maintain Microsoft support. In other words, rather than always manually checking different AKS clusters across multiple environments to keep up with the [Kubernetes version support policy](https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions#kubernetes-version-support-policy), AKSupport will manage all of this for you. This also covers situations where a supported version is pulled early by Microsoft due to security concerns or other critical issues, which they reserve the right to do. In the end, the goal is to free people up for other value-add tasks by keeping things simple for the many uses cases that can benefit from such a tool like general maintenance, Infrastructure as Code (IaC) deployments, etc.
@@ -41,9 +41,9 @@ Releases: [https://github.com/StevenJDH/AKSupport/releases](https://github.com/S
 ## Container registries
 AKSupport container images are currently hosted on the following platforms:
 
+* [Docker Hub](https://hub.docker.com/r/stevenjdh/aksupport)
 * [Amazon Elastic Container Registry (ECR)](https://gallery.ecr.aws/stevenjdh/aksupport)
 * [GitHub Container Registry](https://github.com/users/StevenJDH/packages/container/package/aksupport)
-* [Docker Hub](https://hub.docker.com/r/stevenjdh/aksupport)
 
 For production use cases, it is not recommended to pull an image with the `:latest` tag, or no tag since these are equivalent. And yes, it is ironic storing an image meant for Azure on AWS, but they offer free storage.😏
 
