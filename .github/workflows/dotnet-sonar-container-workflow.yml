@@ -53,11 +53,11 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         dotnet tool install --global dotnet-sonarscanner
-        dotnet sonarscanner begin /k:StevenJDH_AKSupport /o:stevenjdh /d:sonar.login=$SONAR_TOKEN \
+        dotnet sonarscanner begin /k:StevenJDH_AKSupport /o:stevenjdh /d:sonar.token=$SONAR_TOKEN \
             /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="**/*.*"
         dotnet build --configuration Release --no-restore
         dotnet test --no-build --verbosity normal
-        dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+        dotnet sonarscanner end /d:sonar.token=$SONAR_TOKEN
 
     - name: Upload Artifact
       if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/')
